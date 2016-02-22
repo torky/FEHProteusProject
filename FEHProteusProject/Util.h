@@ -53,9 +53,9 @@ void move(float inches, int percent){
 
     //Convert the inches to a value for shaft encoding
     int counts = inches * COUNTS_PER_INCH;
-    //Drive the specified number of cycles and distance
+    //Drive the specified number of cycles and or distance
     float delta = 0;
-    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts && delta < inches){
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts && (delta < inches)){
         float loc[] = getRPSData;
         double x = pow(loc[0] - start[0], 2);
         double y = pow(loc[1] - start[1], 2);

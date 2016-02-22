@@ -34,10 +34,13 @@ FEHServo magnetArm(FEHServo::Servo1);
 static const float LINE_COLOR = 1.75;
 static const float RED_COLOR = 1.75;
 static const float BLUE_COLOR = 1.75;
-static const float COUNTS_PER_INCH = 615.0/14.0;
+//Motor and wheel constants
+static const float COUNTS_PER_REV = 100;
+static const float WHEEL_DIAMETER = 2.5;
+static const float PI = 3.14159265358979323846;
+static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER);
 
-int main(void)
-{
+int main(void){
     /*
     //Shaft Encoding program
 
