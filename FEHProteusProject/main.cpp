@@ -4,15 +4,7 @@
 #include <FEHMotor.h>
 #include <FEHServo.h>
 #include <math.h>
-#include "Optosensor.h"
-#include "Util.h"
-
-//Need optosensor height and filter color
-//Constants
-static const float LINE_COLOR = 1.75;
-static const float RED_COLOR = 1.75;
-static const float BLUE_COLOR = 1.75;
-static const float CYCLES_PER_INCH = 1.75;
+#include <FEHRPS.h>
 
 //Sensor declarations
 AnalogInputPin leftOpt(FEHIO::P0_2);
@@ -36,9 +28,13 @@ static const float RED_COLOR = 1.75;
 static const float BLUE_COLOR = 1.75;
 //Motor and wheel constants
 static const float COUNTS_PER_REV = 100;
-static const float WHEEL_DIAMETER = 2.5;
+static const float WHEEL_DIAMETER = 3;
 static const float PI = 3.14159265358979323846;
 static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER);
+
+#include "Optosensor.h"
+#include "Util.h"
+#include "Tasks.h"
 
 int main(void){
     /*
@@ -148,18 +144,43 @@ int main(void){
     */
 
     //Must call this method first
+    LCD.WriteLine("Starting");
     RPS.InitializeTouchMenu();
 
     //Method used to determine what colors are
-    calibrateOpto(buttons);
+    //calibrateOpto(buttons);
 
     //Test the moving
-    move(10, 40);
+    //move(10, 40);
     //Show the color you are reading in
-    while(!buttons.MiddlePressed()){
-        LCD.WriteLine(readLight(midOpt));
+    //while(!buttons.MiddlePressed()){
+    //    LCD.WriteLine(readLight(midOpt));
+    //}
+    LCD.WriteLine("getting data");
+    bool lever[3];
+    float loc[3];
+    while(!buttons.RightPressed()){
+        getLeverData(lever);
+        getRPSData(loc);
+        LCD.WriteLine("Loc data");
+        LCD.WriteLine("x");
+        LCD.WriteLine(loc[0]);
+        LCD.WriteLine("y");
+        LCD.WriteLine(loc[1]);
+        LCD.WriteLine("bearing");
+        LCD.WriteLine(loc[2]);
+
+        LCD.WriteLine("Lever data");
+        LCD.WriteLine("1");
+        LCD.WriteLine(lever[0]);
+        LCD.WriteLine("2");
+        LCD.WriteLine(lever[1]);
+        LCD.WriteLine("3");
+        LCD.WriteLine(lever[2]);
+        Sleep(1000);
+        LCD.Clear();
     }
-    followLine();
+    //followLine();
 
     //Bump switches turning and stuff
     /*

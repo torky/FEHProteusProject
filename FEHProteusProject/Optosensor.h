@@ -8,7 +8,7 @@ void calibrateOpto(ButtonBoard buttons){
     LCD.Clear( FEHLCD::Black );
     LCD.SetFontColor( FEHLCD::White );
     LCD.WriteLine("Waiting");
-    while(!button.LeftPressed()){
+    while(!buttons.LeftPressed()){
         LCD.Write("Left: ");
         LCD.WriteLine(leftOpt.Value());
         LCD.Write("Right: ");
@@ -28,19 +28,19 @@ void followLine(){
         r = rightOpt.Value();
         m = midOpt.Value();
 
-        left.SetPercent(15);
-        right.SetPercent(15);
+        leftMotor.SetPercent(15);
+        rightMotor.SetPercent(15);
         //THIS STRUCTURE IS NOT THE MOST EFFICIENT BUT IT IS CLEAR
         //If the middle is on at all, keep going
-        if(m > LINE_VALUE){
+        if(m > LINE_COLOR){
 
-        }else if(r < LINE_VALUE){
-            left.SetPercent(20);
-        }else if(l < LINE_VALUE){
-            right.SetPercent(20);
+        }else if(r < LINE_COLOR){
+            leftMotor.SetPercent(20);
+        }else if(l < LINE_COLOR){
+            rightMotor.SetPercent(20);
         }else{
-            left.SetPercent(0);
-            right.SetPercent(0);
+            leftMotor.SetPercent(0);
+            rightMotor.SetPercent(0);
         }
     }
 
