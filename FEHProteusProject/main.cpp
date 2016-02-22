@@ -148,18 +148,32 @@ int main(void){
     */
 
     //Must call this method first
+    LCD.WriteLine("Starting");
     RPS.InitializeTouchMenu();
 
     //Method used to determine what colors are
     calibrateOpto(buttons);
 
     //Test the moving
-    move(10, 40);
+    //move(10, 40);
     //Show the color you are reading in
     while(!buttons.MiddlePressed()){
         LCD.WriteLine(readLight(midOpt));
     }
-    followLine();
+    LCD.WriteLine("getting data");
+    while(!buttons.RightPressed()){
+        bool[] a = getLeverData();
+        float[] loc = getRPSData();
+        for(int c = 0; c < 3; c++){
+            LCD.WriteLine("Counter");
+            LCD.WriteLine(c);
+            LCD.WriteLine("Lever data");
+            LCD.WriteLine(a[c]);
+            LCD.WriteLine("RPS Data");
+            LCD.WriteLine(loc[c]);
+        }
+    }
+    //followLine();
 
     //Bump switches turning and stuff
     /*
