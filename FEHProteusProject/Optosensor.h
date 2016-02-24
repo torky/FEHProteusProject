@@ -19,6 +19,18 @@ void calibrateOpto(ButtonBoard buttons){
         LCD.Clear();
     }
 }
+void calibrateCdS(ButtonBoard buttons){
+    //Read and display sensor data
+    LCD.Clear( FEHLCD::Black );
+    LCD.SetFontColor( FEHLCD::White );
+    LCD.WriteLine("Waiting");
+    while(!buttons.LeftPressed()){
+        LCD.Write("Value: ");
+        LCD.WriteLine(CdS.Value());
+        Sleep(2000);
+        LCD.Clear();
+    }
+}
 
 void followLine(){
     LCD.WriteLine("GO!");
@@ -46,8 +58,8 @@ void followLine(){
 
 }
 
-char readLight(AnalogInputPin opto){
-    float color = opto.Value();
+char readLight(AnalogInputPin cell){
+    float color = cell.Value();
     char ret;
     if(color <= RED_COLOR){
         ret = 'r';

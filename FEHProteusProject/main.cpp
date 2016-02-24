@@ -11,13 +11,15 @@ AnalogInputPin leftOpt(FEHIO::P0_2);
 AnalogInputPin midOpt(FEHIO::P0_1);
 AnalogInputPin rightOpt(FEHIO::P0_0);
 
+AnalogInputPin CdS(FEHIO::P0_3);
+
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank3);
-DigitalEncoder rightEnc(FEHIO::P2_0);
-DigitalEncoder leftEnc(FEHIO::P2_1);
+DigitalEncoder rightEnc(FEHIO::P2_1);
+DigitalEncoder leftEnc(FEHIO::P2_0);
 
-FEHMotor leftMotor(FEHMotor::Motor0, 12.0);
-FEHMotor rightMotor(FEHMotor::Motor1, 12.0);
+FEHMotor leftMotor(FEHMotor::Motor1, 12.0);
+FEHMotor rightMotor(FEHMotor::Motor0, 12.0);
 
 FEHServo cardArm(FEHServo::Servo0);
 FEHServo magnetArm(FEHServo::Servo1);
@@ -40,25 +42,32 @@ static const float COUNTS_PER_DEGREE = 215.0/90.0;
 int main(void){
 
     //Must call this method first
-    //RPS.InitializeTouchMenu();
+    RPS.InitializeTouchMenu();
     LCD.Clear();
 
     //LCD.WriteLine("facing north");
-    //while(!buttons.RightPressed()){
-    //  faceNorth();
-    //}
+    while(!buttons.RightPressed()){
+      faceNorth();
+      Sleep(2000);
+    }
 
     //Method used to determine what colors are
     //calibrateOpto(buttons);
+    calibrateCdS(buttons);
 
     //Test the moving
-    moveNoRPS(21.5, 25);
-    LCD.WriteLine("First move done");
-    turn(-90, 25);
-    LCD.WriteLine("First turn done");
+    //moveNoRPS(5, 25);
+    //moveNoRPS(-5, 25);
+    //turn(-90, 25);
+    //turn(90, 25);
+
+    //moveNoRPS(21.5, 25);
+    //LCD.WriteLine("First move done");
+    //turn(-90, 25);
+    //LCD.WriteLine("First turn done");
     //pickupDumbbell();
-    moveNoRPS(42, 25);
-    LCD.WriteLine("2nd move done");
+    //moveNoRPS(42, 25);
+    //LCD.WriteLine("2nd move done");
 
     //Show the color you are reading in
     //while(!buttons.MiddlePressed()){

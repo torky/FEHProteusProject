@@ -48,8 +48,10 @@ void faceNorth(){
     LCD.WriteLine(data[2]);
     //Convert from the RPS cycle to the turning cycle
     if(data[2] > 180){
-        turn(-(data[2]-360), 10);
+        LCD.WriteLine((data[2]-360));
+        turn((data[2]-360), 10);
     }else{
-        turn(-data[2], 10);
+        turn(data[2], 10);
+        LCD.WriteLine(data[2]);
     }
 }
