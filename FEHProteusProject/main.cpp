@@ -51,6 +51,34 @@ int main(void){
     //Method used to determine what colors are
     //calibrateOpto(buttons);
 
+    //test
+
+    int counts = 243;
+
+    //Reset encoder counts
+       right_encoder.ResetCounts();
+       left_encoder.ResetCounts();
+
+       //Set both motors to desired percent
+       right_motor.SetPercent(25);
+       left_motor.SetPercent(25);
+
+
+
+       //While the average of the left and right encoder are less than counts,
+       //keep running motors
+       while((left_encoder.Counts() + right_encoder.Counts()) / 2. < counts);
+
+       //Turn off motors
+       right_motor.Stop();
+       left_motor.Stop();
+
+    LCD.Write("Actual LE Counts: ");
+    LCD.WriteLine(left_encoder.Counts());
+    LCD.Write("Actual RE Counts: ");
+    LCD.WriteLine(right_encoder.Counts());
+
+/*
     //Test the moving
     moveNoRPS(21.5, 25);
     LCD.WriteLine("First move done");
@@ -59,6 +87,8 @@ int main(void){
     //pickupDumbbell();
     moveNoRPS(42, 25);
     LCD.WriteLine("2nd move done");
+
+    */
 
     //Show the color you are reading in
     //while(!buttons.MiddlePressed()){
