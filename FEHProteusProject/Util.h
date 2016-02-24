@@ -41,14 +41,17 @@ void move(float inches, int percent){
     //Get robot location and bearing
     float start[3];
     getRPSData(start);
+    LCD.WriteLine("Got move rps data");
     //Reset encoder counts
     rightEnc.ResetCounts();
     leftEnc.ResetCounts();
+
 
     //Set left and right motor percentages
     rightMotor.SetPercent(percent);
     leftMotor.SetPercent(percent);
 
+    LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
     int counts = inches * COUNTS_PER_INCH;
     //Drive the specified number of cycles and or distance
@@ -64,6 +67,7 @@ void move(float inches, int percent){
     //Turn off motors
     rightMotor.Stop();
     leftMotor.Stop();
+
     //Check RPS to see if the distance was correct
     float end[3];
     getRPSData(end);
@@ -71,18 +75,51 @@ void move(float inches, int percent){
 
 }
 
-void turn(int angle, int percent){
-
-}
-void turn_right(int percent, int counts) //using encoders
-{
+void moveNoRPS(float inches, int percent){
     //Reset encoder counts
     rightEnc.ResetCounts();
     leftEnc.ResetCounts();
 
-    //Set both motors to desired percent
+
+    //Set left and right motor percentages
     rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(-percent);
+    leftMotor.SetPercent(percent);
+
+    LCD.WriteLine("set percentages");
+    //Convert the inches to a value for shaft encoding
+    int counts = inches * COUNTS_PER_INCH;
+    //Drive the specified number of cycles and or distance
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
+    }
+
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+
+void turn(int angle, int percent){
+    //Reset encoder counts
+    //LCD.WriteLine("reseting counts");
+    rightEnc.ResetCounts();
+    leftEnc.ResetCounts();
+
+    //LCD.WriteLine("converting");
+    //Convert angle to counts
+    int counts = angle * COUNTS_PER_DEGREE;
+    if(counts < 0){
+        counts = -counts;
+    }
+
+    //LCD.WriteLine("deciding");
+    if(angle < 0){
+        //Set both motors to desired percent
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(-percent);
+    }else{
+        //Set both motors to desired percent
+        rightMotor.SetPercent(-percent);
+        leftMotor.SetPercent(percent);
+    }
 
     //While the average of the left and right encoder are less than counts,
     //keep running motors
@@ -93,24 +130,6 @@ void turn_right(int percent, int counts) //using encoders
     leftMotor.Stop();
 }
 
-/*void turn_left(int percent, int counts) //using encoders
-{
-    //Reset encoder counts
-    right_encoder.ResetCounts();
-    left_encoder.ResetCounts();
-
-    //Set both motors to desired percent
-    right_motor.SetPercent(-percent);
-    left_motor.SetPercent(percent);
-
-    //While the average of the left and right encoder are less than counts,
-    //keep running motors
-    while((left_encoder.Counts() + right_encoder.Counts()) / 2. < counts);
-
-    //Turn off motors
-    right_motor.Stop();
-    left_motor.Stop();
-}*/
 
 void pushArm(float inches){
 

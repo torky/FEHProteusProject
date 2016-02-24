@@ -9,7 +9,13 @@ void startWait(){
 
 void ascendRamp(){
     //Move forward
+    move(10, 75);
     //Straighten out robot
+    float data[3];
+    getRPSData(data);
+    if(data[2] > 4 && data[2] < 361){
+        turn(-data[2], 10);
+    }
 }
 
 void pushButtons(){
@@ -33,4 +39,17 @@ void pushButtons(){
 void approachRamp(){
     //Move to the ramp
     //Center robot and line up properly
+}
+
+void faceNorth(){
+    float data[3];
+    LCD.WriteLine("Angle is:");
+    getRPSData(data);
+    LCD.WriteLine(data[2]);
+    //Convert from the RPS cycle to the turning cycle
+    if(data[2] > 180){
+        turn(-(data[2]-360), 10);
+    }else{
+        turn(-data[2], 10);
+    }
 }
