@@ -49,7 +49,7 @@ void move(float inches, int percent){
 
     //Set left and right motor percentages
     rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(percent);
+    leftMotor.SetPercent(-1*percent);
 
     LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
@@ -83,7 +83,7 @@ void moveNoRPS(float inches, int percent){
 
     //Set left and right motor percentages
     rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(percent);
+    leftMotor.SetPercent(-1*percent);
 
     LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
@@ -114,11 +114,11 @@ void turn(int angle, int percent){
     if(angle < 0){
         //Set both motors to desired percent
         rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(-percent);
+        leftMotor.SetPercent(-1*-percent);
     }else{
         //Set both motors to desired percent
         rightMotor.SetPercent(-percent);
-        leftMotor.SetPercent(percent);
+        leftMotor.SetPercent(-1*percent);
     }
 
     //While the average of the left and right encoder are less than counts,
