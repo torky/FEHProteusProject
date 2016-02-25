@@ -1,7 +1,7 @@
 #ifndef TASKS_H
 #define TASKS_H
 
-#endif // TASKS_H
+ // TASKS_H
 
 void startWait(){
     while(readLight(midOpt) != 'r');
@@ -55,3 +55,4 @@ void faceNorth(){
         LCD.WriteLine(data[2]);
     }
 }
+#endif

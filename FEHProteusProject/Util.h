@@ -1,7 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#endif // UTIL_H
+ // UTIL_H
 
 //In order x, y, heading
 //Heading is in degrees, 0 is "North", 90 is "East"
@@ -138,3 +138,4 @@ void pushArm(float inches){
 void rotateMagnet(int angle){
 
 }
+#endif
