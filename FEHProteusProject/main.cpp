@@ -42,18 +42,18 @@ static const float COUNTS_PER_DEGREE = 215.0/90.0;
 int main(void){
 
     //Must call this method first
-    RPS.InitializeTouchMenu();
+    //RPS.InitializeTouchMenu();
     LCD.Clear();
 
     //LCD.WriteLine("facing north");
-    while(!buttons.RightPressed()){
-      faceNorth();
+    //while(!buttons.RightPressed()){
+      //faceNorth();
       Sleep(2000);
-    }
+    //}
 
     //Method used to determine what colors are
     //calibrateOpto(buttons);
-    calibrateCdS(buttons);
+    //calibrateCdS(buttons);
 
     //test
 
@@ -81,6 +81,7 @@ int main(void){
     LCD.WriteLine(leftEnc.Counts());
     LCD.Write("Actual RE Counts: ");
     LCD.WriteLine(rightEnc.Counts());
+
 /*
     //Test the moving
     //moveNoRPS(5, 25);
