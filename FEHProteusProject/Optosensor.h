@@ -1,8 +1,5 @@
 #ifndef OPTOSENSOR_H
 #define OPTOSENSOR_H
-
-#endif // OPTOSENSOR_H
-
 void calibrateOpto(ButtonBoard buttons){
     //Read and display sensor data
     LCD.Clear( FEHLCD::Black );
@@ -70,4 +67,7 @@ char readLight(AnalogInputPin cell){
     }
     return ret;
 }
+
+
+#endif // OPTOSENSOR_H
 
