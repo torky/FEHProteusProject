@@ -57,7 +57,7 @@ int main(void){
 
     //test
 
-    int counts = 243;
+    int counts = COUNTS_PER_INCH*6;
 
     //Reset encoder counts
        rightEnc.ResetCounts();
