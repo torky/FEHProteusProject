@@ -1,0 +1,10 @@
+Counts per Inch theoretical = 33.7408479
+
+Test 1:
+    Theoretical
+        counts = 202.445
+        distance = 6 inches
+    Actual
+        LE counts = 205
+        RE counts = 206
+        distance = 202.445088 inches
