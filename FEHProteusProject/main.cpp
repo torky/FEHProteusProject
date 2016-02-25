@@ -60,28 +60,27 @@ int main(void){
     int counts = 243;
 
     //Reset encoder counts
-       right_encoder.ResetCounts();
-       left_encoder.ResetCounts();
+       rightEnc.ResetCounts();
+       leftEnc.ResetCounts();
 
        //Set both motors to desired percent
-       right_motor.SetPercent(25);
-       left_motor.SetPercent(25);
+       rightMotor.SetPercent(25);
+       leftMotor.SetPercent(25);
 
 
 
        //While the average of the left and right encoder are less than counts,
        //keep running motors
-       while((left_encoder.Counts() + right_encoder.Counts()) / 2. < counts);
+       while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
 
        //Turn off motors
-       right_motor.Stop();
-       left_motor.Stop();
+       rightMotor.Stop();
+       leftMotor.Stop();
 
     LCD.Write("Actual LE Counts: ");
-    LCD.WriteLine(left_encoder.Counts());
+    LCD.WriteLine(leftEnc.Counts());
     LCD.Write("Actual RE Counts: ");
-    LCD.WriteLine(right_encoder.Counts());
-
+    LCD.WriteLine(rightEnc.Counts());
 /*
     //Test the moving
     //moveNoRPS(5, 25);
