@@ -135,6 +135,11 @@ void pushArm(float inches){
 
 }
 
+void calibrateServo(FEHServo servoMotor, int min, int max){
+    servoMotor.SetMin(min);
+    servoMotor.SetMax(max);
+}
+
 void rotateMagnet(int angle){
 
 }
