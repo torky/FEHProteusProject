@@ -32,7 +32,8 @@ static const float BLUE_COLOR = 1.75;
 static const float COUNTS_PER_REV = 318;
 static const float WHEEL_DIAMETER = 3;
 static const float PI = 3.14159265358979323846;
-static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER);
+static const float ACTUAL_ADJUSTMENT = 6.5/6;
+static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER)*ACTUAL_ADJUSTMENT;
 static const float COUNTS_PER_DEGREE = 215.0/90.0;
 
 #include "Optosensor.h"
