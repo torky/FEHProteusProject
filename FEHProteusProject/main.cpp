@@ -25,9 +25,12 @@ FEHServo cardArm(FEHServo::Servo0);
 FEHServo magnetArm(FEHServo::Servo1);
 
 //Need optosensor height and filter color
-static const float LINE_COLOR = 1.75;
-static const float RED_COLOR = 1.75;
-static const float BLUE_COLOR = 1.75;
+static const float YELLOW_COLOR = 2.50;
+static const float RED_COLOR = 0.5;
+static const float BLUE_COLOR = 0.96;
+static const float BLACK_COLOR = 3.0;
+
+static const float LINE_SURFACE = 3.0;
 //Motor and wheel constants
 static const float COUNTS_PER_REV = 318;
 static const float WHEEL_DIAMETER = 3;
@@ -46,125 +49,103 @@ int main(void){
     LCD.Clear();
 
     //LCD.WriteLine("facing north");
-    //while(!buttons.RightPressed()){
+    //while(!buttons.RightPressed());{
       //faceNorth();
-      Sleep(2000);
+//}
+    //Sleep(2000);
+    //LCD.WriteLine("TEST 1: Start");
+    //LCD.WriteLine("TEST 1: Read for r");
+    //while(readLight(CdS) != 'r'){
+    //    LCD.WriteLine(CdS.Value());
     //}
+    //Sleep(2000);
 
-    //Method used to determine what colors are
-    //calibrateOpto(buttons);
-    //calibrateCdS(buttons);
-
-    //test
-
-    int counts = COUNTS_PER_INCH*6;
-
-    //Reset encoder counts
-       rightEnc.ResetCounts();
-       leftEnc.ResetCounts();
-
-       //Set both motors to desired percent
-       rightMotor.SetPercent(25);
-       leftMotor.SetPercent(25);
-
-
-
-       //While the average of the left and right encoder are less than counts,
-       //keep running motors
-       while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
-
-       //Turn off motors
-       rightMotor.Stop();
-       leftMotor.Stop();
-
-    LCD.Write("Actual LE Counts: ");
-    LCD.WriteLine(leftEnc.Counts());
-    LCD.Write("Actual RE Counts: ");
-    LCD.WriteLine(rightEnc.Counts());
-
-/*
-    //Test the moving
-    //moveNoRPS(5, 25);
-    //moveNoRPS(-5, 25);
-    //turn(-90, 25);
-    //turn(90, 25);
-
-    //moveNoRPS(21.5, 25);
-    //LCD.WriteLine("First move done");
-    //turn(-90, 25);
-    //LCD.WriteLine("First turn done");
-    //pickupDumbbell();
-    //moveNoRPS(42, 25);
-    //LCD.WriteLine("2nd move done");
-
-    */
-
-    //Show the color you are reading in
-    //while(!buttons.MiddlePressed()){
-    //    LCD.WriteLine(readLight(midOpt));
-    //}
-    /*LCD.WriteLine("getting data");
-    bool lever[3];
-    float loc[3];
     while(!buttons.RightPressed()){
-        getLeverData(lever);
-        getRPSData(loc);
-        LCD.WriteLine("Loc data");
-        LCD.WriteLine("x");
-        LCD.WriteLine(loc[0]);
-        LCD.WriteLine("y");
-        LCD.WriteLine(loc[1]);
-        LCD.WriteLine("bearing");
-        LCD.WriteLine(loc[2]);
-
-        LCD.WriteLine("Lever data");
-        LCD.WriteLine("1");
-        LCD.WriteLine(lever[0]);
-        LCD.WriteLine("2");
-        LCD.WriteLine(lever[1]);
-        LCD.WriteLine("3");
-        LCD.WriteLine(lever[2]);
-        Sleep(1000);
-        LCD.Clear();
+        LCD.WriteLine(CdS.Value());
     }
-    */
-    //followLine();
+    //moveNoRPS(40, 25);
+    //turn(85, 25);
+    //Sleep(5000);
+    //move(25, 25);
+    //turn(45, 25);
 
-    //Bump switches turning and stuff
-    /*
-    LCD.WriteLine("FF");
-    left.SetPercent(30);
-    right.SetPercent(30);
-    while((bumpFR.Value())||(bumpFR.Value())){}
-    LCD.WriteLine("Turn 1");
-    left.Stop();
-    //left.SetPercent(30);
-    right.SetPercent(-30);
-    while((bumpBR.Value())||(bumpBR.Value())){}
-    LCD.WriteLine("FF again");
-    left.SetPercent(30);
-    right.SetPercent(30);
-    while((bumpFR.Value())||(bumpFR.Value())){}
+    while(!buttons.RightPressed());
 
-    left.SetPercent(-30);
-    right.Stop();
-    while((bumpBR.Value())||(bumpBR.Value())){}
-    left.SetPercent(30);
-    right.SetPercent(30);
-    while((bumpFR.Value())||(bumpFR.Value())){}
-    right.Stop();
-    left.Stop();
-    //Swap the motors that go backwards
-    //drive forward full
-    //servo.TouchCalibrate();
-    //servo.SetMin(500);
-    //servo.SetMax(2238);
 
-    //while( true ){
-        //servo.SetDegree(180.0/3.265*cds.Value());
-    //}
-    */
+    /////TEST 1/////
+    //approachRamp()
+    LCD.WriteLine("TEST 1: Start wait");
+    startWait();
+    LCD.WriteLine("TEST 1: Move 16");
+    moveNoRPS(16, 25);
+    Sleep(2000);
 
+    LCD.WriteLine("TEST 1: Turn 44");
+    turn(44, 25);
+    Sleep(1000);
+    LCD.WriteLine("TEST 1: Move 10");
+    moveNoRPS(10, 25);
+    LCD.WriteLine("TEST 1: Turn 90");
+    turn(-90, 25);
+    Sleep(1000);
+    //reverse and grab dumbbell
+    LCD.WriteLine("TEST 1: Move 6");
+    moveNoRPS(6, 25);
+    Sleep(2000);
+    LCD.Clear();
+
+    //Go up ramp
+    LCD.WriteLine("TEST 1: Move 11");
+    moveNoRPS(11, 25);
+    LCD.WriteLine("TEST 1: Go over hump");
+    moveNoRPS(9, 50);
+    LCD.WriteLine("TEST 1: Move 25");
+    moveNoRPS(35, 25);
+    LCD.Clear();
+    LCD.WriteLine("r is red, b is blue");
+    LCD.WriteLine("k is black, y is yellow");
+    LCD.WriteLine(readLight(CdS));
+    LCD.WriteLine("TEST 1: Done");
+
+    while(!buttons.RightPressed());
+
+    LCD.WriteLine("TEST 1.5: Fucking book it");
+    moveNoRPS(20, 40);
+
+    while(!buttons.RightPressed());
+
+    /////TEST 2/////
+    LCD.Clear();
+    Sleep(2000);
+    LCD.WriteLine("TEST 2: Start");
+    LCD.WriteLine("TEST 2: Read for r");
+    while(readLight(CdS) != 'r'){
+        LCD.WriteLine(CdS.Value());
+    }
+    Sleep(2000);
+
+    LCD.WriteLine("TEST 2: Start");
+    LCD.WriteLine("TEST 2: Move 23");
+    moveNoRPS(23, 25);
+    Sleep(2000);
+
+    LCD.WriteLine("TEST 2: Turn 87");
+    turn(-90, 25);
+    //LCD.WriteLine("TEST 2: Face north");
+    //faceNorth();
+    LCD.WriteLine("TEST 2: Move 25");
+    moveNoRPS(25, 25);
+    //LCD.WriteLine("TEST 2: Face North");
+    //faceNorth();
+    Sleep(2000);
+
+    LCD.WriteLine("TEST 2: Go up ramp");
+    moveNoRPS(10, 25);
+    LCD.WriteLine("TEST 2: Go over hump");
+    moveNoRPS(5, 40);
+    LCD.WriteLine("TEST 2: Move 21.5");
+    moveNoRPS(21.5, 25);
+    LCD.WriteLine("TEST 2: Done");
 
     return 0;
 }

@@ -8,3 +8,10 @@ Test 1:
         LE counts = 205
         RE counts = 206
         distance = 202.445088 inches
+
+CdS Cell Data
+    Start:  .327
+    Black:  2.9
+    Red:    .338
+    Blue:   .905
+    Yellow: 2.095

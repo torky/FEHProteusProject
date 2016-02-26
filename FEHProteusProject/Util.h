@@ -83,20 +83,23 @@ void moveNoRPS(float inches, int percent){
 
     //Set left and right motor percentages
     rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(percent);
+    leftMotor.SetPercent(percent-2);
 
     LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
     int counts = inches * COUNTS_PER_INCH;
+    LCD.WriteLine(counts);
     //Drive the specified number of cycles and or distance
-    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
-    }
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
 
+    LCD.WriteLine(leftEnc.Counts());
+    LCD.WriteLine(rightEnc.Counts());
     //Turn off motors
     rightMotor.Stop();
     leftMotor.Stop();
 }
 
+//Fix turning delta
 void turn(int angle, int percent){
     //Reset encoder counts
     //LCD.WriteLine("reseting counts");

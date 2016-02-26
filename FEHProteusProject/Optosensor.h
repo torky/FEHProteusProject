@@ -41,11 +41,11 @@ void followLine(){
         rightMotor.SetPercent(15);
         //THIS STRUCTURE IS NOT THE MOST EFFICIENT BUT IT IS CLEAR
         //If the middle is on at all, keep going
-        if(m > LINE_COLOR){
+        if(m > LINE_SURFACE){
 
-        }else if(r < LINE_COLOR){
+        }else if(r < LINE_SURFACE){
             leftMotor.SetPercent(20);
-        }else if(l < LINE_COLOR){
+        }else if(l < LINE_SURFACE){
             rightMotor.SetPercent(20);
         }else{
             leftMotor.SetPercent(0);
@@ -62,8 +62,10 @@ char readLight(AnalogInputPin cell){
         ret = 'r';
     }else if(color <= BLUE_COLOR){
         ret = 'b';
+    }else if(color <= YELLOW_COLOR){
+        ret = 'y';
     }else{
-        ret = 'n';
+        ret = 'k';
     }
     return ret;
 }

@@ -4,7 +4,7 @@
  // TASKS_H
 
 void startWait(){
-    while(readLight(midOpt) != 'r');
+    while(readLight(CdS) != 'r');
 }
 
 void ascendRamp(){
@@ -41,6 +41,7 @@ void approachRamp(){
     //Center robot and line up properly
 }
 
+//Get this working
 void faceNorth(){
     float data[3];
     LCD.WriteLine("Angle is:");

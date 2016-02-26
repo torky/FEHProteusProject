@@ -1,0 +1,98 @@
+
+    //turn(90, 25);
+    //Method used to determine what colors are
+    //calibrateOpto(buttons);
+    //calibrateCdS(buttons);
+
+      /*
+    //test
+
+    int counts = COUNTS_PER_INCH*6;
+
+    //Reset encoder counts
+       rightEnc.ResetCounts();
+       leftEnc.ResetCounts();
+
+       //Set both motors to desired percent
+       rightMotor.SetPercent(25);
+       leftMotor.SetPercent(25);
+
+
+
+       //While the average of the left and right encoder are less than counts,
+       //keep running motors
+       while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
+
+       //Turn off motors
+       rightMotor.Stop();
+       leftMotor.Stop();
+
+    LCD.Write("Actual LE Counts: ");
+    LCD.WriteLine(leftEnc.Counts());
+    LCD.Write("Actual RE Counts: ");
+    LCD.WriteLine(rightEnc.Counts());
+
+    //moveNoRPS(21.5, 25);
+    //LCD.WriteLine("First move done");
+    //turn(-90, 25);
+    //LCD.WriteLine("First turn done");
+    //pickupDumbbell();
+    //moveNoRPS(42, 25);
+    //LCD.WriteLine("2nd move done");
+
+    */
+
+    //Show the color you are reading in
+    //while(!buttons.MiddlePressed()){
+    //    LCD.WriteLine(readLight(midOpt));
+    //}
+    /*LCD.WriteLine("getting data");
+    bool lever[3];
+    float loc[3];
+    while(!buttons.RightPressed()){
+        getLeverData(lever);
+        getRPSData(loc);
+        LCD.WriteLine("Loc data");
+        LCD.WriteLine("x");
+        LCD.WriteLine(loc[0]);
+        LCD.WriteLine("y");
+        LCD.WriteLine(loc[1]);
+        LCD.WriteLine("bearing");
+        LCD.WriteLine(loc[2]);
+    }
+    */
+    //followLine();
+
+    //Bump switches turning and stuff
+    /*
+    LCD.WriteLine("FF");
+    left.SetPercent(30);
+    right.SetPercent(30);
+    while((bumpFR.Value())||(bumpFR.Value())){}
+    LCD.WriteLine("Turn 1");
+    left.Stop();
+    //left.SetPercent(30);
+    right.SetPercent(-30);
+    while((bumpBR.Value())||(bumpBR.Value())){}
+    LCD.WriteLine("FF again");
+    left.SetPercent(30);
+    right.SetPercent(30);
+    while((bumpFR.Value())||(bumpFR.Value())){}
+
+    left.SetPercent(-30);
+    right.Stop();
+    while((bumpBR.Value())||(bumpBR.Value())){}
+    left.SetPercent(30);
+    right.SetPercent(30);
+    while((bumpFR.Value())||(bumpFR.Value())){}
+    right.Stop();
+    left.Stop();
+    //Swap the motors that go backwards
+    //drive forward full
+    //servo.TouchCalibrate();
+    //servo.SetMin(500);
+    //servo.SetMax(2238);
+
+    //while( true ){
+        //servo.SetDegree(180.0/3.265*cds.Value());
+    //}
