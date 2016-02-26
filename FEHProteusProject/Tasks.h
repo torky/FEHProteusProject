@@ -3,6 +3,12 @@
 
  // TASKS_H
 
+static const int TOP = 1;
+static const int BOTTOM = 0;
+static const int TOP_TO_BOTTOM = 5;
+static const int BOTTOM_TO_TOP = 4;
+static const int SAME = 3;
+
 void startWait(){
     while(readLight(midOpt) != 'r');
 }
@@ -55,4 +61,34 @@ void faceNorth(){
         LCD.WriteLine(data[2]);
     }
 }
+
+//Determine if you are on the top or bottom
+int determineLocation(int xLocation, int yLocation){
+
+}
+
+void moveToPoint(int x, int y, int xLocation, int yLocation){
+
+    int startingLocation = determineLocation(xLocation, yLocation);
+    int destination = determineLocation(x, y);
+    int traversingRamp;
+
+    //determine movement pattern
+    if(startingLocation>destination){
+        traversingRamp = TOP_TO_BOTTOM;
+    }else if(startingLocation>destination){
+        traversingRamp = BOTTOM_TO_TOP;
+    }
+
+    //move
+    switch (traversingRamp){
+        case TOP_TO_BOTTOM:
+
+        case BOTTOM_TO_TOP:
+
+        case SAME:
+
+    }
+}
+
 #endif
