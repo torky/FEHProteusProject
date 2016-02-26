@@ -140,7 +140,7 @@ void calibrateServo(FEHServo servoMotor, int min, int max){
     servoMotor.SetMax(max);
 }
 
-void rotateMagnet(int angle){
-
+void rotateMagnet(float angle){
+    magnetArm.SetDegree(angle);
 }
 #endif
