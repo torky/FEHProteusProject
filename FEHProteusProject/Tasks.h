@@ -40,20 +40,4 @@ void approachRamp(){
     //Move to the ramp
     //Center robot and line up properly
 }
-
-//Get this working
-void faceNorth(){
-    float data[3];
-    LCD.WriteLine("Angle is:");
-    getRPSData(data);
-    LCD.WriteLine(data[2]);
-    //Convert from the RPS cycle to the turning cycle
-    if(data[2] > 180){
-        LCD.WriteLine((data[2]-360));
-        turn((data[2]-360), 10);
-    }else{
-        turn(data[2], 10);
-        LCD.WriteLine(data[2]);
-    }
-}
 #endif

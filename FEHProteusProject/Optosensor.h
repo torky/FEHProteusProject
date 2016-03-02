@@ -29,30 +29,31 @@ void calibrateCdS(ButtonBoard buttons){
     }
 }
 
-void followLine(){
+void followLine(int direction){
+    //For direction, 1 is forward, -1 is backward
     LCD.WriteLine("GO!");
     float l, r, m;
-    while(true){
+    bool onLine = true;
+    while(onLine){
         l = leftOpt.Value();
         r = rightOpt.Value();
         m = midOpt.Value();
 
         leftMotor.SetPercent(15);
         rightMotor.SetPercent(15);
-        //THIS STRUCTURE IS NOT THE MOST EFFICIENT BUT IT IS CLEAR
         //If the middle is on at all, keep going
         if(m > LINE_SURFACE){
 
         }else if(r < LINE_SURFACE){
-            leftMotor.SetPercent(20);
+            leftMotor.SetPercent(direction*20);
         }else if(l < LINE_SURFACE){
-            rightMotor.SetPercent(20);
+            rightMotor.SetPercent(direction*20);
         }else{
             leftMotor.SetPercent(0);
             rightMotor.SetPercent(0);
+            onLine = false;
         }
     }
-
 }
 
 char readLight(AnalogInputPin cell){

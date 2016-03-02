@@ -100,6 +100,7 @@ void moveNoRPS(float inches, int percent){
 }
 
 //Fix turning delta
+//Turning right is positive, left is negative
 void turn(int angle, int percent){
     //Reset encoder counts
     //LCD.WriteLine("reseting counts");
@@ -141,4 +142,53 @@ void pushArm(float inches){
 void rotateMagnet(int angle){
 
 }
+
+//Get this working
+void faceNorth(){
+    float data[3];
+    LCD.WriteLine("Angle is:");
+    getRPSData(data);
+    LCD.WriteLine(data[2]);
+    //Convert from the RPS cycle to the turning cycle
+    if(data[2] > 180){
+        LCD.WriteLine((data[2]-360));
+        turn((data[2]-360), 20);
+    }else{
+        turn(data[2], 20);
+        LCD.WriteLine(data[2]);
+    }
+}
+
+//Needs to be tested thoroughly
+void faceAngle(int angle){
+    float data[3];
+    LCD.WriteLine("Angle is:");
+    getRPSData(data);
+    LCD.WriteLine(data[2]);
+    //Convert from the RPS cycle to the turning cycle
+    //If it is in the right side
+    if(data[2] > 180){
+        //if the angle to turn to is also in the right
+        if(angle > (data[2] - 180)){
+            //turn right by a bit
+            turn(data[2] - angle, 20);
+        }else if(angle > data[2]){
+            turn(data[2] - angle, 20);
+    }else{
+            turn(data[2] - 360 - angle, 20);
+        }
+    }else{
+        if(angle < data[2]){
+            //turn right a bit
+            turn(angle, 20);
+        }else if(angle > (data[2] + 180)){
+            //turn right a lot
+            turn(data[2] + angle - 180, 20);
+        }else{
+            //turn left a bit
+            turn(data[2]-angle, 20);
+        }
+    }
+}
+
 #endif
