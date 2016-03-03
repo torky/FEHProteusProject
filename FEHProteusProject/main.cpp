@@ -109,9 +109,7 @@ int main(void){
     moveNoRPS(8, 25);
     faceNorth();
     moveNoRPS(8.5, 25);
-    moveNoRPS(2, 25);
-    moveNoRPS(.5, 35);
-    faceNorth();
+    timedMove(500, 35);
 
     Sleep(2000);
 
