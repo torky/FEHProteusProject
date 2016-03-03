@@ -7,6 +7,7 @@
 void startWait(){
     while(readLight(CdS) != 'r');
 }
+
 //Precondition:  Robot is at start
 //Postcondition: Robot is between the ramp and dumbbell, facing north
 void startToRampAlign(){
@@ -15,11 +16,23 @@ void startToRampAlign(){
     LCD.WriteLine("Turn 44 right");
     turn(44, 25);
     LCD.WriteLine("Move 10");
-    moveNoRPS(10, 25);
+    moveNoRPS(10, 35);
     LCD.WriteLine("Turn 90");
     turn(-90, 25);
     faceNorth();
 }
+
+void approachDumbbell(){
+
+}
+void grabDumbbell(){
+
+}
+void approachRamp(){
+    //Move to the ramp
+    //Center robot and line up properly
+}
+
 //Precondition:  Robot nubs are at ramp base
 //Postconsition: Robot is at the top of the ramp
 void ascendRamp(){
@@ -35,10 +48,6 @@ void ascendRamp(){
     moveNoRPS(9, 55);
     //Scooch forward
     moveNoRPS(1, 25);
-    faceNorth();
-    Sleep(500);
-    faceNorth();
-    Sleep(500);
     faceNorth();
 }
 
@@ -58,10 +67,5 @@ void pushButtons(){
     }
     //reverse to get on line
 
-}
-
-void approachRamp(){
-    //Move to the ramp
-    //Center robot and line up properly
 }
 #endif

@@ -16,13 +16,13 @@ AnalogInputPin CdS(FEHIO::P1_7);
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank2);
-DigitalEncoder rightEnc(FEHIO::P3_7);
+DigitalEncoder rightEnc(FEHIO::P3_0);
 DigitalEncoder leftEnc(FEHIO::P1_0);
 
-FEHMotor leftMotor(FEHMotor::Motor1, 12.0);
-FEHMotor rightMotor(FEHMotor::Motor3, 12.0);
+FEHMotor leftMotor(FEHMotor::Motor3, 12.0);
+FEHMotor rightMotor(FEHMotor::Motor0, 12.0);
 
-FEHServo cardArm(FEHServo::Servo0);
+FEHServo cardArm(FEHServo::Servo7);
 FEHServo magnetArm(FEHServo::Servo1);
 
 //Need optosensor height and filter color
@@ -51,7 +51,6 @@ static const float MAGNET_MAX = 2430;
 #include "Tasks.h"
 
 int main(void){
-
     //Necessary initialization code
     RPS.InitializeTouchMenu();
     calibrateServos();
@@ -63,7 +62,7 @@ int main(void){
     //SD.CloseLog();
 
     //Line following test
-    calibrateOpto(buttons);
+    /*calibrateOpto(buttons);
     followLine(1);
     while(!buttons.RightPressed());
     followLine(1);
@@ -75,7 +74,7 @@ int main(void){
     followLine(-1);
     while(!buttons.RightPressed());
     followLine(-1);
-    while(!buttons.LeftPressed());
+    while(!buttons.LeftPressed());*/
 
     //Get faceAngle working
     //int angle = 0;
@@ -103,13 +102,52 @@ int main(void){
 
     LCD.WriteLine("Move 6");
     moveNoRPS(6, 25);
-
     ascendRamp();
+    faceNorth();
 
     //push a button
+    moveNoRPS(8, 25);
+    faceNorth();
+    moveNoRPS(8.5, 25);
+    moveNoRPS(2, 25);
+    moveNoRPS(.5, 35);
+    faceNorth();
+
+    Sleep(2000);
+
     //go to switches
+    moveNoRPS(12, -25);
+    faceNorth();
+    faceAngle(90);
+    moveNoRPS(17, 25);
+    Sleep(3000);
+    //face lever 1
+    turn(-87, 20);
+    Sleep(3000);
+    //Position in front of
+    moveNoRPS(4, 25);
+    Sleep(1000);
+    cardArm.SetDegree(15.0);
+    Sleep(1000);
+    //pulling the lever
+    moveNoRPS(1.5, -20);
+    //lift arm
+    cardArm.SetDegree(60.0);
+
+    //reverse
+    moveNoRPS(6, -25);
+    turn(-90, 20);
+    moveNoRPS(4.75, 25);
+    //fdace lever 2
+    turn(90, 20);
+    cardArm.SetDegree(15.0);
+    Sleep(1000);
+    moveNoRPS(5.5, 25);
+
+
     //do switches
 
+    Sleep(10000);
     /////PROPER TASK ORDERING/////
     //Get to the light
     LCD.WriteLine("TEST 1: Move 9");

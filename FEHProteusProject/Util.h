@@ -89,9 +89,14 @@ void moveNoRPS(float inches, int percent){
     leftEnc.ResetCounts();
 
 
-    //Set left and right motor percentages
-    rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(percent-2);
+    if(percent < 0){
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent+2);
+    }else{
+        //Set left and right motor percentages
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent-2);
+    }
 
     LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
@@ -144,18 +149,18 @@ void turn(int angle, int percent){
 
 
 void pushArm(float inches){
-    cardArm.setDegree(inches * ARM_DEGREE_PER_INCH);
+    cardArm.SetDegree(inches * ARM_DEGREE_PER_INCH);
 }
 
 void rotateMagnet(int angle){
-    magnetArm.setDegree(angle);
+    magnetArm.SetDegree(angle);
 }
 
 //Get this working
 void faceNorth(){
     float data[3];
     for(int c = 0; c < 3; c++){
-        LCD.WriteLine("Angle is:");
+        LCD.Write("Angle is ");
         getRPSData(data);
         LCD.WriteLine(data[2]);
         //Convert from the RPS cycle to the turning cycle
@@ -166,40 +171,43 @@ void faceNorth(){
             turn(data[2], 20);
             LCD.WriteLine(data[2]);
         }
-        LCD.WriteLine("Wait for 10ms");
-        Sleep(10);
+        LCD.WriteLine("Wait for 100ms");
+        Sleep(100);
     }
 }
 
 //Needs to be tested thoroughly
 void faceAngle(int angle){
     float data[3];
-    LCD.WriteLine("Angle is:");
-    getRPSData(data);
-    LCD.WriteLine(data[2]);
-    //Convert from the RPS cycle to the turning cycle
-    //If it is in the right side
-    if(data[2] > 180){
-        //if the angle to turn to is also in the right
-        if(angle > (data[2] - 180)){
-            //turn right by a bit
-            turn(data[2] - angle, 20);
-        }else if(angle > data[2]){
-            turn(data[2] - angle, 20);
-    }else{
-            turn(data[2] - 360 - angle, 20);
-        }
-    }else{
-        if(angle < data[2]){
-            //turn right a bit
-            turn(angle, 20);
-        }else if(angle > (data[2] + 180)){
-            //turn right a lot
-            turn(data[2] + angle - 180, 20);
+    for(int c = 0; c < 3; c++){
+        LCD.Write("Angle is:");
+        getRPSData(data);
+        LCD.WriteLine(data[2]);
+        //Convert from the RPS cycle to the turning cycle
+        //If it is in the right side
+        if(data[2] > 180){
+            //if the angle to turn to is also in the right
+            if(angle > (data[2] - 180)){
+                //turn right by a bit
+                turn(data[2] - angle, 20);
+            }else if(angle > data[2]){
+                turn(data[2] - angle, 20);
+            }else{
+                turn(data[2] - 360 - angle, 20);
+            }
         }else{
-            //turn left a bit
-            turn(data[2]-angle, 20);
+            if(angle < data[2]){
+                //turn right a bit
+                turn(angle, 20);
+            }else if(angle > (data[2] + 180)){
+                //turn right a lot
+                turn(data[2] + angle - 180, 20);
+            }else{
+                //turn left a bit
+                turn(data[2]-angle, 20);
+            }
         }
+        Sleep(500);
     }
 }
 
