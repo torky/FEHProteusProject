@@ -3,6 +3,14 @@
 
  // UTIL_H
 
+void calibrateServos(){
+    cardArm.SetMin(CARD_MIN);
+    cardArm.SetMax(CARD_MAX);
+
+    magnetArm.SetMin(MAGNET_MIN);
+    magnetArm.SetMax(MAGNET_MAX);
+}
+
 //In order x, y, heading
 //Heading is in degrees, 0 is "North", 90 is "East"
 //Returns -2 in the dead zone
@@ -136,26 +144,30 @@ void turn(int angle, int percent){
 
 
 void pushArm(float inches){
-
+    cardArm.setDegree(inches * ARM_DEGREE_PER_INCH);
 }
 
 void rotateMagnet(int angle){
-
+    magnetArm.setDegree(angle);
 }
 
 //Get this working
 void faceNorth(){
     float data[3];
-    LCD.WriteLine("Angle is:");
-    getRPSData(data);
-    LCD.WriteLine(data[2]);
-    //Convert from the RPS cycle to the turning cycle
-    if(data[2] > 180){
-        LCD.WriteLine((data[2]-360));
-        turn((data[2]-360), 20);
-    }else{
-        turn(data[2], 20);
+    for(int c = 0; c < 3; c++){
+        LCD.WriteLine("Angle is:");
+        getRPSData(data);
         LCD.WriteLine(data[2]);
+        //Convert from the RPS cycle to the turning cycle
+        if(data[2] > 180){
+            LCD.WriteLine((data[2]-360));
+            turn((data[2]-360), 20);
+        }else{
+            turn(data[2], 20);
+            LCD.WriteLine(data[2]);
+        }
+        LCD.WriteLine("Wait for 10ms");
+        Sleep(10);
     }
 }
 

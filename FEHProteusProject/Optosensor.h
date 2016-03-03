@@ -8,11 +8,11 @@ void calibrateOpto(ButtonBoard buttons){
     while(!buttons.LeftPressed()){
         LCD.Write("Left: ");
         LCD.WriteLine(leftOpt.Value());
-        LCD.Write("Right: ");
-        LCD.WriteLine(rightOpt.Value());
         LCD.Write("Mid: ");
         LCD.WriteLine(midOpt.Value());
-        Sleep(2000);
+        LCD.Write("Right: ");
+        LCD.WriteLine(rightOpt.Value());
+        Sleep(1000);
         LCD.Clear();
     }
 }
@@ -34,21 +34,25 @@ void followLine(int direction){
     LCD.WriteLine("GO!");
     float l, r, m;
     bool onLine = true;
+    LCD.WriteLine("Entering loop");
     while(onLine){
         l = leftOpt.Value();
         r = rightOpt.Value();
         m = midOpt.Value();
 
-        leftMotor.SetPercent(15);
-        rightMotor.SetPercent(15);
+        leftMotor.SetPercent(direction*20);
+        rightMotor.SetPercent(direction*20);
         //If the middle is on at all, keep going
-        if(m > LINE_SURFACE){
-
+        if(m < LINE_SURFACE){
+            LCD.WriteLine("mid getting reading");
         }else if(r < LINE_SURFACE){
-            leftMotor.SetPercent(direction*20);
+            leftMotor.SetPercent(direction*30);
+            LCD.WriteLine("Turning left");
         }else if(l < LINE_SURFACE){
-            rightMotor.SetPercent(direction*20);
+            rightMotor.SetPercent(direction*30);
+            LCD.WriteLine("Turning right");
         }else{
+            LCD.WriteLine("exiting");
             leftMotor.SetPercent(0);
             rightMotor.SetPercent(0);
             onLine = false;

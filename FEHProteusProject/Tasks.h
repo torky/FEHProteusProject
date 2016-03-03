@@ -3,19 +3,43 @@
 
  // TASKS_H
 
+//Precondition: Robot is above light
 void startWait(){
     while(readLight(CdS) != 'r');
 }
-
+//Precondition:  Robot is at start
+//Postcondition: Robot is between the ramp and dumbbell, facing north
+void startToRampAlign(){
+    LCD.WriteLine("Move 16");
+    moveNoRPS(16, 25);
+    LCD.WriteLine("Turn 44 right");
+    turn(44, 25);
+    LCD.WriteLine("Move 10");
+    moveNoRPS(10, 25);
+    LCD.WriteLine("Turn 90");
+    turn(-90, 25);
+    faceNorth();
+}
+//Precondition:  Robot nubs are at ramp base
+//Postconsition: Robot is at the top of the ramp
 void ascendRamp(){
-    //Move forward
-    move(10, 75);
-    //Straighten out robot
-    float data[3];
-    getRPSData(data);
-    if(data[2] > 4 && data[2] < 361){
-        turn(-data[2], 10);
-    }
+    faceNorth();
+
+    //Go up ramp
+    LCD.WriteLine("Move 10");
+    moveNoRPS(10, 35);
+    //Nubs over the lip
+    Sleep(2000);
+    LCD.WriteLine("TEST 1: Go over hump");
+    //9 inches to power over
+    moveNoRPS(9, 55);
+    //Scooch forward
+    moveNoRPS(1, 25);
+    faceNorth();
+    Sleep(500);
+    faceNorth();
+    Sleep(500);
+    faceNorth();
 }
 
 void pushButtons(){
