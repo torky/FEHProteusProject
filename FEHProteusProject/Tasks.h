@@ -21,15 +21,36 @@ void startToRampAlign(){
     turn(-90, 25);
     faceNorth();
 }
+void startToDumbbellAlign(){
+    LCD.WriteLine("Move 18");
+    moveNoRPS(19.5, 25);
+    Sleep(2000);
+    LCD.WriteLine("Face 270");
+    faceAngle(270);
+    Sleep(2000);
+    LCD.WriteLine("Move 11");
+    moveNoRPS(11, 35);
+    Sleep(2000);
+    LCD.WriteLine("Turn 90");
+    turn(-90, 25);
+    faceNorth();
+}
+
 
 void approachDumbbell(){
-
+    moveNoRPS(13, -25);
+    faceNorth();
 }
 void grabDumbbell(){
-
+    rotateMagnet(0);
+    Sleep(1000);
+    rotateMagnet(70);
+    Sleep(1000);
 }
 void approachRamp(){
     //Move to the ramp
+    moveNoRPS(16, 30);
+    faceNorth();
     //Center robot and line up properly
 }
 
@@ -49,6 +70,13 @@ void ascendRamp(){
     //Scooch forward
     moveNoRPS(1, 25);
     faceNorth();
+}
+void scrapeDumbbell(){
+    //lower arm
+    rotateMagnet(15);
+    Sleep(1000);
+    //move forward a bit
+    moveNoRPS(6, 35);
 }
 
 void pushButtons(){

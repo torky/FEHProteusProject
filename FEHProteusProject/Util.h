@@ -185,8 +185,8 @@ void faceNorth(){
             turn(data[2], 20);
             LCD.WriteLine(data[2]);
         }
-        LCD.WriteLine("Wait for 100ms");
-        Sleep(100);
+        LCD.WriteLine("Wait for 200ms");
+        Sleep(200);
     }
 }
 

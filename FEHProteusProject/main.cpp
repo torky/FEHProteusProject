@@ -91,15 +91,29 @@ int main(void){
         LCD.WriteLine(CdS.Value());
     }
 
-    /////PERFORMANCE TEST 2/////
+    /////PERFORMANCE TEST 3/////
 
     LCD.WriteLine("Start wait");
     startWait();
-    startToRampAlign();
-    //approcahDumbbell();
-    //grabDumbbell();
-    //approachRamp();
+    //startToRampAlign();
+    startToDumbbellAlign();
+    Sleep(4000);
+    approachDumbbell();
+    grabDumbbell();
+    approachRamp();
+    Sleep(2000);
+    ascendRamp();
 
+    //Beeline to drop off
+    faceAngle(90);
+    moveNoRPS(22, 35);
+    faceAngle(180);
+    moveNoRPS(15, -25);
+    scrapeDumbbell();
+
+
+    /////PERFORMANCE TEST 2 STUFF/////
+    /*
     LCD.WriteLine("Move 6");
     moveNoRPS(6, 25);
     ascendRamp();
@@ -133,6 +147,7 @@ int main(void){
     moveNoRPS(3, 25);
     faceAngle(180);
     moveNoRPS(2.5, 25);
+    */
 
     /////Light Stuff/////
     //Get to the light
