@@ -22,20 +22,19 @@ void startToRampAlign(){
     faceNorth();
 }
 void startToDumbbellAlign(){
-    LCD.WriteLine("Move 18");
-    moveNoRPS(19.5, 25);
-    Sleep(2000);
+    LCD.WriteLine("Move 20");
+    moveNoRPS(20, 25);
+    Sleep(1000);
     LCD.WriteLine("Face 270");
     faceAngle(270);
-    Sleep(2000);
-    LCD.WriteLine("Move 11");
-    moveNoRPS(11, 35);
+    Sleep(1000);
+    LCD.WriteLine("Move 10");
+    moveNoRPS(10, 35);
     Sleep(2000);
     LCD.WriteLine("Turn 90");
     turn(-90, 25);
     faceNorth();
 }
-
 
 void approachDumbbell(){
     moveNoRPS(13, -25);

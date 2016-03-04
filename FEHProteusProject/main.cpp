@@ -105,12 +105,18 @@ int main(void){
     ascendRamp();
 
     //Beeline to drop off
+    moveNoRPS(4, 25);
     faceAngle(90);
     moveNoRPS(22, 35);
     faceAngle(180);
-    moveNoRPS(15, -25);
+    moveNoRPS(6, -25);
     scrapeDumbbell();
 
+    //Return down ramp
+    faceAngle(270);
+    moveNoRPS(22, 35);
+    faceAngle(180);
+    moveNoRPS(20, 25);
 
     /////PERFORMANCE TEST 2 STUFF/////
     /*
