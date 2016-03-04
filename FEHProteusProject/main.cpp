@@ -103,25 +103,16 @@ int main(void){
     LCD.WriteLine("Move 6");
     moveNoRPS(6, 25);
     ascendRamp();
-    faceNorth();
+    pushButtons();
 
-    //push a button
-    moveNoRPS(8, 25);
-    faceNorth();
-    moveNoRPS(8.5, 25);
-    timedMove(500, 35);
-
-    Sleep(2000);
-
-    //go to switches
+    //Buttons to switches
     moveNoRPS(12, -25);
     faceNorth();
     faceAngle(90);
     moveNoRPS(17, 25);
-    Sleep(3000);
-    //face lever 1
+
+    //Do the levers from a strange place
     turn(-87, 20);
-    Sleep(3000);
     //Position in front of
     moveNoRPS(4, 25);
     Sleep(1000);
@@ -131,49 +122,30 @@ int main(void){
     moveNoRPS(1.5, -20);
     //lift arm
     cardArm.SetDegree(60.0);
-
     //reverse
     moveNoRPS(6, -25);
     turn(-90, 20);
-    moveNoRPS(4.75, 25);
+    moveNoRPS(3.25, 25);
     //fdace lever 2
     turn(90, 20);
     cardArm.SetDegree(15.0);
     Sleep(1000);
-    moveNoRPS(5.5, 25);
+    moveNoRPS(3, 25);
+    faceAngle(180);
+    moveNoRPS(2.5, 25);
 
-
-    //do switches
-
-    Sleep(10000);
-    /////PROPER TASK ORDERING/////
+    /////Light Stuff/////
     //Get to the light
-    LCD.WriteLine("TEST 1: Move 9");
-    moveNoRPS(9, 25);
+    //LCD.WriteLine("TEST 1: Move 9");
+    //moveNoRPS(9, 25);
     //This places line under the poeky do
-    followLine(1);
-    LCD.Clear();
+    //followLine(1);
+    //LCD.Clear();
 
     //Light reading
     //LCD.WriteLine("r is red, b is blue");
     //LCD.WriteLine("k is black, y is yellow");
     //LCD.WriteLine(readLight(CdS));
-    LCD.WriteLine("TEST 1: Done");
-    moveNoRPS(3, 25);
-    moveNoRPS(-3, 25);
-    //followLine(-1);
-    //turn 90 to face switches
-    //drop dumbbell
-    //drive forward to switch
-    //Extend arm an push
-    //reverse to pull it back
-    //turn 90 right
-    //drive forward a bit
-    //turn 90 left
-    //drive forward
-
-    //moveNoRPS(6, 25);
-    //DO LEVERS
 
     return 0;
 }

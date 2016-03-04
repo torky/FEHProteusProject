@@ -98,16 +98,30 @@ void moveNoRPS(float inches, int percent){
         leftMotor.SetPercent(percent-2);
     }
 
-    LCD.WriteLine("set percentages");
+    //LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
     int counts = inches * COUNTS_PER_INCH;
-    LCD.WriteLine(counts);
+    //LCD.WriteLine(counts);
     //Drive the specified number of cycles and or distance
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
 
-    LCD.WriteLine(leftEnc.Counts());
-    LCD.WriteLine(rightEnc.Counts());
+    //LCD.WriteLine(leftEnc.Counts());
+    //LCD.WriteLine(rightEnc.Counts());
     //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+void timedMove(int millis, int percent){
+    //Set left and right motor percentages
+    if(percent < 0){
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent+2);
+    }else{
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent-2);
+    }
+
+    Sleep(millis);
     rightMotor.Stop();
     leftMotor.Stop();
 }

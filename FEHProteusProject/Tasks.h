@@ -53,6 +53,18 @@ void ascendRamp(){
 
 void pushButtons(){
     //Move to buttons
+    faceNorth();
+    //push a button
+    moveNoRPS(8, 25);
+    faceNorth();
+    //Change this so it is over light
+    moveNoRPS(7.0, 25);
+
+    //dirty button press
+    timedMove(1000, 20);
+    Sleep(5000);
+
+    //True press
     //Read light
     char color = readLight(midOpt);
     //Move based on color
