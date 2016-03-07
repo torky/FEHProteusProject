@@ -95,14 +95,36 @@ int main(void){
 
     LCD.WriteLine("Start wait");
     startWait();
+    //first diagonal line up
+    LCD.WriteLine("Move to first point");
+    moveRPS(27.7,26, 25);
+    //Go backwards
+    LCD.WriteLine("Go backwards");
+    moveRPS(27.7, 16, -25);
+    Sleep(2000);
+    LCD.WriteLine("Pickup dumbbell");
+    grabDumbbell();
+    moveRPS(27.7,26, 25);
+    //precondition guess
+    Sleep(5000);
+    LCD.WriteLine("Guess 2 inches.");
+
+    move(2, 25);
+    Sleep(5000);
+
+    ascendRamp();
+
+    /*
     //startToRampAlign();
     startToDumbbellAlign();
-    Sleep(4000);
     approachDumbbell();
+    Sleep(2000);
     grabDumbbell();
     approachRamp();
-    Sleep(2000);
+    Sleep(1000);
     ascendRamp();
+
+    Sleep(5000);
 
     //Beeline to drop off
     moveNoRPS(4, 25);
@@ -117,6 +139,7 @@ int main(void){
     moveNoRPS(22, 35);
     faceAngle(180);
     moveNoRPS(20, 25);
+    */
 
     /////PERFORMANCE TEST 2 STUFF/////
     /*

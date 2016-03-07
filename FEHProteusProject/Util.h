@@ -45,6 +45,8 @@ void getLeverData(bool data[]){
     data[2] = RPS.BlueSwitchDirection()-1;
 }
 
+
+
 void move(float inches, int percent){
     //Get robot location and bearing
     float start[3];
@@ -224,5 +226,33 @@ void faceAngle(int angle){
         Sleep(500);
     }
 }
+
+void moveRPS(float x, float y, int power){
+    float currentX = RPS.X();
+    float currentY = RPS.Y();
+
+    float a = x-currentX;
+    float b = y-currentY;
+
+    float distance = sqrt((a)*(a)+(b)*(b));
+
+    float headingRadians = acos(a/distance);
+    float headingDegrees = headingRadians*360/2/PI;
+
+
+    if(b<0){
+        headingDegrees = -headingDegrees;
+    }
+
+    if(power<0){
+        faceAngle(-headingDegrees);
+        move(distance, -power);
+    }else{
+        faceAngle(headingDegrees);
+        move(distance, power);
+
+    }
+}
+
 
 #endif

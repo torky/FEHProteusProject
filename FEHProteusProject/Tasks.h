@@ -22,14 +22,14 @@ void startToRampAlign(){
     faceNorth();
 }
 void startToDumbbellAlign(){
-    LCD.WriteLine("Move 20");
-    moveNoRPS(20, 25);
+    LCD.WriteLine("Move 16");
+    moveNoRPS(16, 25);
     Sleep(1000);
     LCD.WriteLine("Face 270");
     faceAngle(270);
     Sleep(1000);
-    LCD.WriteLine("Move 10");
-    moveNoRPS(10, 35);
+    LCD.WriteLine("Move 5");
+    moveNoRPS(5, 35);
     Sleep(2000);
     LCD.WriteLine("Turn 90");
     turn(-90, 25);
@@ -37,13 +37,13 @@ void startToDumbbellAlign(){
 }
 
 void approachDumbbell(){
-    moveNoRPS(13, -25);
+    moveNoRPS(10, -25);
     faceNorth();
 }
 void grabDumbbell(){
-    rotateMagnet(0);
+    rotateMagnet(120);
     Sleep(1000);
-    rotateMagnet(70);
+    rotateMagnet(5);
     Sleep(1000);
 }
 void approachRamp(){
