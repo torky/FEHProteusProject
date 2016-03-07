@@ -23,7 +23,7 @@ FEHMotor leftMotor(FEHMotor::Motor3, 12.0);
 FEHMotor rightMotor(FEHMotor::Motor0, 12.0);
 
 FEHServo cardArm(FEHServo::Servo7);
-FEHServo magnetArm(FEHServo::Servo1);
+FEHServo magnetArm(FEHServo::Servo0);
 
 //Need optosensor height and filter color
 static const float YELLOW_COLOR = 2.50;
