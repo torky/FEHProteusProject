@@ -43,12 +43,14 @@ void approachDumbbell(){
 void grabDumbbell(){
     rotateMagnet(120);
     Sleep(1000);
-    rotateMagnet(5);
+    move(5, 25);
+    Sleep(1000);
+    rotateMagnet(0);
     Sleep(1000);
 }
 void approachRamp(){
     //Move to the ramp
-    moveNoRPS(16, 30);
+    moveNoRPS(12, 30);
     faceNorth();
     //Center robot and line up properly
 }

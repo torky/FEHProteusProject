@@ -90,6 +90,8 @@ int main(void){
     //}
     while(!buttons.RightPressed()){
         LCD.WriteLine(CdS.Value());
+        //faceNorth();
+        //Sleep(1000);
     }
 
     /////PERFORMANCE TEST 3/////
@@ -99,22 +101,21 @@ int main(void){
     //first diagonal line up
     LCD.WriteLine("Move to first point");
     move(15, 35);
+    Sleep(2000);
 
     LCD.WriteLine("Move to right x with 6 inch adjust");
-    Sleep(5000);
     moveX(33.2,25);
 
     LCD.WriteLine("Move to back perfectly???");
-    Sleep(5000);
+    Sleep(2000);
     moveY(16.3, -25);
-    faceNorth();
 
     LCD.WriteLine("grab that bell");
-    Sleep(5000);
+    Sleep(2000);
     grabDumbbell();
 
     LCD.WriteLine("Go up that ramp");
-    Sleep(5000);
+    Sleep(2000);
     moveY(65.5, 25);
 
     /*

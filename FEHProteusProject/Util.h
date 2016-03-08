@@ -45,7 +45,8 @@ void getLeverData(bool data[]){
     data[2] = RPS.BlueSwitchDirection()-1;
 }
 
-
+static const int rightOffset = 0;
+static const int leftOffset = 2;
 
 void move(float inches, int percent){
     //Get robot location and bearing
@@ -61,12 +62,12 @@ void move(float inches, int percent){
 
 
     if(percent < 0){
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent-2);
+        rightMotor.SetPercent(percent+rightOffset);
+        leftMotor.SetPercent(percent+leftOffset);
     }else{
         //Set left and right motor percentages
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent+2);
+        rightMotor.SetPercent(percent-rightOffset);
+        leftMotor.SetPercent(percent-leftOffset);
     }
 
     LCD.WriteLine("set percentages");
@@ -100,12 +101,12 @@ void moveNoRPS(float inches, int percent){
 
 
     if(percent < 0){
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent+2);
+        rightMotor.SetPercent(percent+rightOffset);
+        leftMotor.SetPercent(percent+leftOffset);
     }else{
         //Set left and right motor percentages
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent-2);
+        rightMotor.SetPercent(percent-rightOffset);
+        leftMotor.SetPercent(percent-leftOffset);
     }
 
     //LCD.WriteLine("set percentages");
@@ -124,11 +125,11 @@ void moveNoRPS(float inches, int percent){
 void timedMove(int millis, int percent){
     //Set left and right motor percentages
     if(percent < 0){
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent+2);
+        rightMotor.SetPercent(percent+rightOffset);
+        leftMotor.SetPercent(percent+leftOffset);
     }else{
-        rightMotor.SetPercent(percent);
-        leftMotor.SetPercent(percent-2);
+        rightMotor.SetPercent(percent-rightOffset);
+        leftMotor.SetPercent(percent-leftOffset);
     }
 
     Sleep(millis);
@@ -183,17 +184,22 @@ void rotateMagnet(int angle){
 //Get this working
 void faceNorth(){
     float data[3];
+    LCD.WriteLine("FACE NORTH");
     for(int c = 0; c < 3; c++){
         LCD.Write("Angle is ");
         getRPSData(data);
         LCD.WriteLine(data[2]);
         //Convert from the RPS cycle to the turning cycle
         if(data[2] > 180){
-            LCD.WriteLine((data[2]-360));
-            turn((data[2]-360), 20);
+            if(data[2]-360 < -2){
+                turn((data[2]-360), 25);
+                LCD.WriteLine((data[2]-360));
+            }
         }else{
-            turn(data[2], 20);
-            LCD.WriteLine(data[2]);
+            if(data[2] > 2){
+                turn(data[2], 25);
+                LCD.WriteLine(data[2]);
+            }
         }
         LCD.WriteLine("Wait for 200ms");
         Sleep(200);
