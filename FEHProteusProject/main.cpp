@@ -49,6 +49,7 @@ static const float MAGNET_MAX = 2430;
 #include "Optosensor.h"
 #include "Util.h"
 #include "Tasks.h"
+#include "Brain.h"
 
 int main(void){
     //Necessary initialization code
@@ -97,22 +98,24 @@ int main(void){
     startWait();
     //first diagonal line up
     LCD.WriteLine("Move to first point");
-    moveRPS(27.7,26, 25);
-    //Go backwards
-    LCD.WriteLine("Go backwards");
-    moveRPS(27.7, 16, -25);
-    Sleep(2000);
-    LCD.WriteLine("Pickup dumbbell");
+    move(15, 35);
+
+    LCD.WriteLine("Move to right x with 6 inch adjust");
+    Sleep(5000);
+    moveX(33.2,25);
+
+    LCD.WriteLine("Move to back perfectly???");
+    Sleep(5000);
+    moveY(16.3, -25);
+    faceNorth();
+
+    LCD.WriteLine("grab that bell");
+    Sleep(5000);
     grabDumbbell();
-    moveRPS(27.7,26, 25);
-    //precondition guess
-    Sleep(5000);
-    LCD.WriteLine("Guess 2 inches.");
 
-    move(2, 25);
+    LCD.WriteLine("Go up that ramp");
     Sleep(5000);
-
-    ascendRamp();
+    moveY(65.5, 25);
 
     /*
     //startToRampAlign();

@@ -58,8 +58,16 @@ void move(float inches, int percent){
 
 
     //Set left and right motor percentages
-    rightMotor.SetPercent(percent);
-    leftMotor.SetPercent(percent);
+
+
+    if(percent < 0){
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent-2);
+    }else{
+        //Set left and right motor percentages
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(percent+2);
+    }
 
     LCD.WriteLine("set percentages");
     //Convert the inches to a value for shaft encoding
@@ -227,6 +235,97 @@ void faceAngle(int angle){
     }
 }
 
+//Take two
+void faceAngle2(float angle){
+    //inch adjust
+    Sleep(200);
+    LCD.Write("Heading b4 turn: ");
+    LCD.WriteLine(RPS.Heading());
+
+    LCD.Write("Goal: ");
+    LCD.WriteLine(angle);
+
+    bool notAtAngle = true;
+    while(notAtAngle){
+        Sleep(300);
+        float turnDegrees = RPS.Heading()-angle;
+        while(turnDegrees<0){
+            turnDegrees=turnDegrees+360;
+        }
+
+
+
+
+       /* if(turnDegrees<-180){
+            turnDegrees = -1*(turnDegrees+360);
+        }else if(turnDegrees>180){
+            turnDegrees = turnDegrees-360;
+        }*/
+
+        if((turnDegrees>358)||(turnDegrees<2)){
+            notAtAngle = false;
+        }else{
+            if(turnDegrees>180){
+                //turn positive
+                turn(-1, 20);
+            }else{
+                //turn negative
+                turn(1, 20);
+
+            }
+            LCD.Write("Heading: ");
+            LCD.WriteLine(RPS.Heading());
+            LCD.Write("turnDegrees: ");
+            LCD.WriteLine(turnDegrees);
+
+
+        }
+    }
+    Sleep(200);
+    LCD.Write("Heading after turn: ");
+    LCD.WriteLine(RPS.Heading());
+}
+
+//turn right 2 inches of change
+//turn left 8 inches of change
+
+//New idea bitches
+void moveX(float x, int power){
+    //turn right 2 inches of change
+    //turn left 8 inches of change
+    if(x-RPS.X()>0){
+        LCD.WriteLine(RPS.X());
+        faceAngle2(270);
+    }else{
+        LCD.WriteLine(RPS.Y());
+
+        faceAngle2(90);
+    }
+    float distance = x-RPS.X();
+    if(distance<0){
+        distance = distance*-1;
+    }
+    move(distance , power);
+
+}
+
+void moveY(float y, int power){
+    //turn right 2 inches of change
+    //turn left 8 inches of change
+    if((y-RPS.Y())*power>0){
+        faceAngle2(0);
+    }else{
+        faceAngle2(180);
+    }
+    float distance = y-RPS.Y();
+    if(distance<0){
+        distance = distance*-1;
+    }
+    move(distance , power);
+
+
+}
+
 void moveRPS(float x, float y, int power){
     float currentX = RPS.X();
     float currentY = RPS.Y();
@@ -239,19 +338,60 @@ void moveRPS(float x, float y, int power){
     float headingRadians = acos(a/distance);
     float headingDegrees = headingRadians*360/2/PI;
 
-
+    //consider the other 180 degrees;
     if(b<0){
-        headingDegrees = -headingDegrees;
+        headingDegrees = -1*headingDegrees;
     }
 
+    //adjusting for the 0 degree
+    headingDegrees = 270+headingDegrees;
+    if(headingDegrees>360){
+        headingDegrees= headingDegrees - 360;
+    }
+
+
+    LCD.Write("Heading degrees: ");
+    LCD.WriteLine(headingDegrees);
+    LCD.Write("Actual heading: ");
+    LCD.WriteLine(RPS.Heading());
+
+    LCD.Write(a);
+    LCD.WriteLine(" inches X");
+    LCD.Write(b);
+    LCD.WriteLine(" inches Y");
+
+    Sleep(5000);
+
+    //if backwards
     if(power<0){
-        faceAngle(-headingDegrees);
-        move(distance, -power);
-    }else{
-        faceAngle(headingDegrees);
-        move(distance, power);
-
+        headingDegrees = headingDegrees+180;
+        if(headingDegrees>360){
+            headingDegrees= headingDegrees - 360;
+        }
+        LCD.WriteLine("negative heading");
+        LCD.Write("Heading degrees: ");
+        LCD.WriteLine(headingDegrees);
+        LCD.Write("Actual heading: ");
+        LCD.WriteLine(RPS.Heading());
+        Sleep(5000);
     }
+
+    //check if heading is over 360 and adjust
+    if(headingDegrees>360){
+        headingDegrees= headingDegrees - 360;
+    }
+
+    if(headingDegrees>180){
+        headingDegrees= headingDegrees - 360;
+    }
+
+    faceAngle2(headingDegrees);
+    LCD.Write("Actual heading------: ");
+    LCD.WriteLine(RPS.Heading());
+    Sleep(5000);
+    move(distance, power);
+
+
 }
 
 
