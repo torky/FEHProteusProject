@@ -250,17 +250,62 @@ void faceAngle2(float angle){
 
     LCD.Write("Goal: ");
     LCD.WriteLine(angle);
+    /*
+
+    float passNoZero = RPS.Heading()-angle;
+    float passThroughZero = RPS.Heading()-angle + 360;
+    if(RPS.Heading()<=180){
+        passNoZero = RPS.Heading()-angle;
+        passThroughZero = RPS.Heading()-angle + 360;
+
+    }else{
+        passNoZero = RPS.Heading()-angle;
+        passThroughZero = 360-angle +RPS.Heading();
+
+    }
+
+
+    if(passNoZero<0){
+        passNoZero = passNoZero*-1;
+    }
+
+    if(passThroughZero<0){
+        passThroughZero = passThroughZero*-1;
+    }
+
+    float initialTurnDegrees = 0;
+    if(passNoZero<=passThroughZero){
+        initialTurnDegrees = RPS.Heading()-angle;
+
+    }else{
+        if(RPS.Heading()<=180){
+            initialTurnDegrees = RPS.Heading()-angle + 360;
+
+        }else{
+            initialTurnDegrees = -1*(360-angle +RPS.Heading());
+
+        }
+
+    }
+
+    float absoluteValueOfTurn = initialTurnDegrees;
+    if(initialTurnDegrees<0){
+        absoluteValueOfTurn *= -1;
+    }
+    if(absoluteValueOfTurn>=2){
+        turn(initialTurnDegrees, 20);
+    }
+    */
 
     bool notAtAngle = true;
     while(notAtAngle){
         Sleep(300);
         float turnDegrees = RPS.Heading()-angle;
+
+
         while(turnDegrees<0){
             turnDegrees=turnDegrees+360;
         }
-
-
-
 
        /* if(turnDegrees<-180){
             turnDegrees = -1*(turnDegrees+360);
@@ -273,6 +318,7 @@ void faceAngle2(float angle){
         }else{
             if(turnDegrees>180){
                 //turn positive
+                //changed from negative one
                 turn(-1, 20);
             }else{
                 //turn negative

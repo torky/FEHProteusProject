@@ -88,12 +88,17 @@ int main(void){
     //    while(!buttons.RightPressed());
     //    angle = angle + 10;
     //}
-    while(!buttons.RightPressed()){
-        LCD.WriteLine(CdS.Value());
-        //faceNorth();
-        //Sleep(1000);
+    /*while(!buttons.RightPressed()){
+        //LCD.WriteLine(CdS.Value());
+        faceAngle2(45);
+        Sleep(1000);
     }
-
+    while(!buttons.LeftPressed()){
+        //LCD.WriteLine(CdS.Value());
+        faceAngle2(315);
+        Sleep(1000);
+    }
+    */
     /////PERFORMANCE TEST 3/////
 
     LCD.WriteLine("Start wait");
@@ -117,6 +122,17 @@ int main(void){
     LCD.WriteLine("Go up that ramp");
     Sleep(2000);
     moveY(65.5, 25);
+
+    faceNorth();
+    moveY(52.5, 25);
+
+    moveX(5.3, 25);
+    faceAngle2(180);
+    moveNoRPS(5, -25);
+
+    scrapeDumbbell();
+    moveX(33.2, 25);
+    moveY(40, 30);
 
     /*
     //startToRampAlign();
