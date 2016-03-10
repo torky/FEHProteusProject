@@ -45,8 +45,10 @@ void getLeverData(bool data[]){
     data[2] = RPS.BlueSwitchDirection()-1;
 }
 
-static const int rightOffset = 0;
-static const int leftOffset = 2;
+static const int rightOffsetForward = 0;
+static const int leftOffsetForward = 0;
+static const int rightOffsetBack = 2;
+static const int leftOffsetBack = 0;
 
 void move(float inches, int percent){
     //Get robot location and bearing
@@ -62,12 +64,12 @@ void move(float inches, int percent){
 
 
     if(percent < 0){
-        rightMotor.SetPercent(percent+rightOffset);
-        leftMotor.SetPercent(percent+leftOffset);
+        rightMotor.SetPercent(percent+rightOffsetBack);
+        leftMotor.SetPercent(percent+leftOffsetBack);
     }else{
         //Set left and right motor percentages
-        rightMotor.SetPercent(percent-rightOffset);
-        leftMotor.SetPercent(percent-leftOffset);
+        rightMotor.SetPercent(percent-rightOffsetForward);
+        leftMotor.SetPercent(percent-leftOffsetForward);
     }
 
     LCD.WriteLine("set percentages");
@@ -101,12 +103,12 @@ void moveNoRPS(float inches, int percent){
 
 
     if(percent < 0){
-        rightMotor.SetPercent(percent+rightOffset);
-        leftMotor.SetPercent(percent+leftOffset);
+        rightMotor.SetPercent(percent+rightOffsetBack);
+        leftMotor.SetPercent(percent+leftOffsetBack);
     }else{
         //Set left and right motor percentages
-        rightMotor.SetPercent(percent-rightOffset);
-        leftMotor.SetPercent(percent-leftOffset);
+        rightMotor.SetPercent(percent-rightOffsetForward);
+        leftMotor.SetPercent(percent-leftOffsetForward);
     }
 
     //LCD.WriteLine("set percentages");
@@ -125,11 +127,12 @@ void moveNoRPS(float inches, int percent){
 void timedMove(int millis, int percent){
     //Set left and right motor percentages
     if(percent < 0){
-        rightMotor.SetPercent(percent+rightOffset);
-        leftMotor.SetPercent(percent+leftOffset);
+        rightMotor.SetPercent(percent+rightOffsetBack);
+        leftMotor.SetPercent(percent+leftOffsetBack);
     }else{
-        rightMotor.SetPercent(percent-rightOffset);
-        leftMotor.SetPercent(percent-leftOffset);
+        //Set left and right motor percentages
+        rightMotor.SetPercent(percent-rightOffsetForward);
+        leftMotor.SetPercent(percent-leftOffsetForward);
     }
 
     Sleep(millis);
@@ -241,6 +244,53 @@ void faceAngle(int angle){
     }
 }
 
+/*
+
+float passNoZero = RPS.Heading()-angle;
+float passThroughZero = RPS.Heading()-angle + 360;
+if(RPS.Heading()<=180){
+    passNoZero = RPS.Heading()-angle;
+    passThroughZero = RPS.Heading()-angle + 360;
+
+}else{
+    passNoZero = RPS.Heading()-angle;
+    passThroughZero = 360-angle +RPS.Heading();
+
+}
+
+
+if(passNoZero<0){
+    passNoZero = passNoZero*-1;
+}
+
+if(passThroughZero<0){
+    passThroughZero = passThroughZero*-1;
+}
+
+float initialTurnDegrees = 0;
+if(passNoZero<=passThroughZero){
+    initialTurnDegrees = RPS.Heading()-angle;
+
+}else{
+    if(RPS.Heading()<=180){
+        initialTurnDegrees = RPS.Heading()-angle + 360;
+
+    }else{
+        initialTurnDegrees = -1*(360-angle +RPS.Heading());
+
+    }
+
+}
+
+float absoluteValueOfTurn = initialTurnDegrees;
+if(initialTurnDegrees<0){
+    absoluteValueOfTurn *= -1;
+}
+if(absoluteValueOfTurn>=2){
+    turn(initialTurnDegrees, 20);
+}
+*/
+
 //Take two
 void faceAngle2(float angle){
     //inch adjust
@@ -250,57 +300,27 @@ void faceAngle2(float angle){
 
     LCD.Write("Goal: ");
     LCD.WriteLine(angle);
-    /*
 
-    float passNoZero = RPS.Heading()-angle;
-    float passThroughZero = RPS.Heading()-angle + 360;
-    if(RPS.Heading()<=180){
-        passNoZero = RPS.Heading()-angle;
-        passThroughZero = RPS.Heading()-angle + 360;
+    float turnDegrees = RPS.Heading()-angle;
 
+    while(turnDegrees<0){
+        turnDegrees=turnDegrees+360;
+    }
+
+    if(turnDegrees>180){
+        //turn positive
+        //changed from negative one
+        turn(turnDegrees-360, 20);
     }else{
-        passNoZero = RPS.Heading()-angle;
-        passThroughZero = 360-angle +RPS.Heading();
+        //turn negative
+        turn(turnDegrees, 20);
 
     }
-
-
-    if(passNoZero<0){
-        passNoZero = passNoZero*-1;
-    }
-
-    if(passThroughZero<0){
-        passThroughZero = passThroughZero*-1;
-    }
-
-    float initialTurnDegrees = 0;
-    if(passNoZero<=passThroughZero){
-        initialTurnDegrees = RPS.Heading()-angle;
-
-    }else{
-        if(RPS.Heading()<=180){
-            initialTurnDegrees = RPS.Heading()-angle + 360;
-
-        }else{
-            initialTurnDegrees = -1*(360-angle +RPS.Heading());
-
-        }
-
-    }
-
-    float absoluteValueOfTurn = initialTurnDegrees;
-    if(initialTurnDegrees<0){
-        absoluteValueOfTurn *= -1;
-    }
-    if(absoluteValueOfTurn>=2){
-        turn(initialTurnDegrees, 20);
-    }
-    */
 
     bool notAtAngle = true;
     while(notAtAngle){
         Sleep(300);
-        float turnDegrees = RPS.Heading()-angle;
+        turnDegrees = RPS.Heading()-angle;
 
 
         while(turnDegrees<0){
@@ -342,6 +362,8 @@ void faceAngle2(float angle){
 //turn left 8 inches of change
 
 //New idea bitches
+//x = the rps x value
+//backwards = negative power value
 void moveX(float x, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
@@ -361,6 +383,8 @@ void moveX(float x, int power){
 
 }
 
+//y = the rps y value
+//backwards = negative power value
 void moveY(float y, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change

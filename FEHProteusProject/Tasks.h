@@ -48,6 +48,16 @@ void grabDumbbell(){
     rotateMagnet(0);
     Sleep(1000);
 }
+
+void scrapeDumbbell(){
+    rotateMagnet(110);
+    Sleep(1000);
+    move(5, 35);
+    Sleep(1000);
+    rotateMagnet(0);
+    Sleep(1000);
+}
+
 void approachRamp(){
     //Move to the ramp
     moveNoRPS(12, 30);
@@ -72,13 +82,7 @@ void ascendRamp(){
     moveNoRPS(1, 25);
     faceNorth();
 }
-void scrapeDumbbell(){
-    //lower arm
-    rotateMagnet(15);
-    Sleep(1000);
-    //move forward a bit
-    moveNoRPS(6, 35);
-}
+
 
 void pushButtons(){
     //Move to buttons

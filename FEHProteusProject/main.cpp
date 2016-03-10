@@ -37,7 +37,7 @@ static const float COUNTS_PER_REV = 318;
 static const float WHEEL_DIAMETER = 3;
 static const float PI = 3.14159265358979323846;
 static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER);
-static const float COUNTS_PER_DEGREE = 215.0/90.0;
+static const float COUNTS_PER_DEGREE = 190.0/90.0;
 static const float ARM_DEGREE_PER_INCH = 0;
 
 //Servo Constants
@@ -106,33 +106,51 @@ int main(void){
     //first diagonal line up
     LCD.WriteLine("Move to first point");
     move(15, 35);
-    Sleep(2000);
 
-    LCD.WriteLine("Move to right x with 6 inch adjust");
+    LCD.WriteLine("Move to right x with 6.5 inch adjust");
     moveX(33.2,25);
 
     LCD.WriteLine("Move to back perfectly???");
-    Sleep(2000);
     moveY(16.3, -25);
 
     LCD.WriteLine("grab that bell");
-    Sleep(2000);
     grabDumbbell();
 
-    LCD.WriteLine("Go up that ramp");
+    LCD.WriteLine("Go to that ramp");
+    moveY(30, 25);
+
+    LCD.WriteLine("Charge");
+    move(20, 30);
+
+    LCD.WriteLine("Face north and align Y 57.3");
+    faceAngle2(0);
+    moveY(56.3, 25);
+
+    LCD.WriteLine("Align x with 2 inch adjust");
+    faceAngle2(90);
+    moveNoRPS(22, 25);
+
+    LCD.WriteLine("Face south and move back");
     Sleep(2000);
-    moveY(65.5, 25);
+    turn(-90,25);
+    moveNoRPS(1, -25);
 
-    faceNorth();
-    moveY(52.5, 25);
-
-    moveX(5.3, 25);
-    faceAngle2(180);
-    moveNoRPS(5, -25);
-
+    LCD.WriteLine("Scrape dumbbell");
+    Sleep(2000);
     scrapeDumbbell();
-    moveX(33.2, 25);
-    moveY(40, 30);
+
+    LCD.WriteLine("Face east");
+    Sleep(2000);
+    turn(-90,25);
+
+    LCD.WriteLine("Move east abit and then align X");
+    Sleep(2000);
+    moveNoRPS(15, 25);
+    moveX(32.7, 25);
+
+    LCD.WriteLine("CHARGE AND FINISH BABIES");
+    Sleep(2000);
+    moveY(15, -30);
 
     /*
     //startToRampAlign();
