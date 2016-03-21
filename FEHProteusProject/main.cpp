@@ -114,6 +114,7 @@ int main(void){
     moveY(16.3, -25);
 
     LCD.WriteLine("grab that bell");
+    faceAngle2(0);
     grabDumbbell();
 
     LCD.WriteLine("Go to that ramp");
@@ -122,13 +123,14 @@ int main(void){
     LCD.WriteLine("Charge");
     move(20, 30);
 
+    //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
-    moveY(56.3, 25);
+    moveY(55.3, 25);
 
     LCD.WriteLine("Align x with 2 inch adjust");
     faceAngle2(90);
-    moveNoRPS(22, 25);
+    moveNoRPS(23.5, 25);
 
     LCD.WriteLine("Face south and move back");
     Sleep(2000);

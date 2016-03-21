@@ -43,19 +43,22 @@ void approachDumbbell(){
 void grabDumbbell(){
     rotateMagnet(120);
     Sleep(1000);
-    move(5, 25);
+    move(3, 25);
     Sleep(1000);
     rotateMagnet(0);
     Sleep(1000);
 }
 
 void scrapeDumbbell(){
-    rotateMagnet(110);
+    rotateMagnet(100);
     Sleep(1000);
     move(5, 35);
     Sleep(1000);
-    rotateMagnet(0);
+    rotateMagnet(30);
     Sleep(1000);
+    timedMove(1000, -35);
+    move(5, 35);
+
 }
 
 void approachRamp(){

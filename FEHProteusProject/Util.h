@@ -333,7 +333,7 @@ void faceAngle2(float angle){
             turnDegrees = turnDegrees-360;
         }*/
 
-        if((turnDegrees>358)||(turnDegrees<2)){
+        if((turnDegrees>359)||(turnDegrees<1)){
             notAtAngle = false;
         }else{
             if(turnDegrees>180){
