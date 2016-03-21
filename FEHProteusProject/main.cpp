@@ -13,6 +13,7 @@ AnalogInputPin midOpt(FEHIO::P0_2);
 AnalogInputPin rightOpt(FEHIO::P0_4);
 
 AnalogInputPin CdS(FEHIO::P1_7);
+AnalogInputPin CdSButtonSensor(FEHIO::P3_2);
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank2);
@@ -30,6 +31,12 @@ static const float YELLOW_COLOR = 2.50;
 static const float RED_COLOR = 0.65;
 static const float BLUE_COLOR = 0.96;
 static const float BLACK_COLOR = 3.0;
+
+//Need CdS value for reading the right color
+static const float RED_LIGHT_COLOR = .42;
+static const float BLUE_LIGHT_COLOR = .84;
+static const float YELLOW_LINE_COLOR = 1.03;
+static const float BLACK_BACKGROUND_COLOR = 1.27;
 
 static const float LINE_SURFACE = 2.00;
 //Motor and wheel constants
@@ -56,6 +63,45 @@ int main(void){
     RPS.InitializeTouchMenu();
     calibrateServos();
     LCD.Clear();
+
+    /////PERFORMANCE TEST 4/////
+
+    LCD.WriteLine("Start wait");
+    startWait();
+    //first diagonal line up
+    LCD.WriteLine("Move to first point");
+    move(15, 35);
+
+    LCD.WriteLine("Move to right x with 6.5 inch adjust");
+    moveX(33.2,25);
+
+    LCD.WriteLine("Move to back perfectly???");
+    moveY(16.3, -25);
+
+    LCD.WriteLine("grab that bell");
+    faceAngle2(0);
+    grabDumbbell();
+
+    LCD.WriteLine("Go to that ramp");
+    moveY(30, 25);
+
+    LCD.WriteLine("Charge");
+    move(20, 30);
+
+    //D move to 55.3, H move to 56.3
+    LCD.WriteLine("Face north and align Y 57.3");
+    faceAngle2(0);
+    moveY(64, 25);
+
+    LCD.WriteLine("Search for light");
+    scanForLight();
+    pushButtons2();
+
+    /*
+    LCD.WriteLine("CHARGE AND FINISH BABIES");
+    Sleep(2000);
+    moveY(15, -30);
+    */
 
     //Writing to file
     //SD.OpenLog();
@@ -100,7 +146,7 @@ int main(void){
     }
     */
     /////PERFORMANCE TEST 3/////
-
+/*
     LCD.WriteLine("Start wait");
     startWait();
     //first diagonal line up
@@ -153,7 +199,7 @@ int main(void){
     LCD.WriteLine("CHARGE AND FINISH BABIES");
     Sleep(2000);
     moveY(15, -30);
-
+*/
     /*
     //startToRampAlign();
     startToDumbbellAlign();

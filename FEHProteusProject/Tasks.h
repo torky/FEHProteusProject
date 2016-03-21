@@ -86,6 +86,36 @@ void ascendRamp(){
     faceNorth();
 }
 
+void scanForLight(){
+
+    int left = 0;
+    float color = 0;
+    while(color == 0){
+
+
+        //move jaggedly back and forth
+        if(left<=5){
+            //go left
+            turn(1,-25);
+            left++;
+            color = determineColor();
+            Sleep(1000);
+        }else if(left<=15){
+            turn(1,25);
+            left++;
+            color = determineColor();
+            Sleep(1000);
+
+        }else{
+            left = -5;
+        }
+        if(color!=0){
+            break;
+            break;
+        }
+    }
+
+}
 
 void pushButtons(){
     //Move to buttons
@@ -112,6 +142,23 @@ void pushButtons(){
 
     }else{
 
+    }
+    //reverse to get on line
+
+}
+
+void pushButtons2(){
+    //Read light
+    float color = determineColor();
+    //Move based on color
+    if(color == BLUE_LIGHT_COLOR){
+        LCD.WriteLine("BLUE");
+
+    }else if(color == RED_LIGHT_COLOR){
+        LCD.WriteLine("RED");
+
+    }else if(color == 0){
+        LCD.WriteLine("We failed");
     }
     //reverse to get on line
 

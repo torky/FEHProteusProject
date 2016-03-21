@@ -3,6 +3,31 @@
 
  // UTIL_H
 
+bool checkColor(float colorValue){
+
+    float upperColorValue = colorValue+.05;
+    float lowerColorValue = colorValue-.05;
+
+    if(CdSButtonSensor.Value()<upperColorValue&&CdSButtonSensor.Value()>lowerColorValue){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+float determineColor(){
+    if(checkColor(BLUE_LIGHT_COLOR)){
+        LCD.WriteLine("It's blue.");
+        return BLUE_LIGHT_COLOR;
+    }else if(checkColor(RED_LIGHT_COLOR)){
+        LCD.WriteLine("It's red.");
+        return RED_LIGHT_COLOR;
+    }else {
+        LCD.WriteLine("It's not blue or red.");
+        return 0;
+    }
+}
+
 void calibrateServos(){
     cardArm.SetMin(CARD_MIN);
     cardArm.SetMax(CARD_MAX);
