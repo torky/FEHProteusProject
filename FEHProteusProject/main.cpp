@@ -76,7 +76,7 @@ int main(void){
     moveX(33.2,25);
 
     LCD.WriteLine("Move to back perfectly???");
-    moveY(16.3, -25);
+    moveY(16.55, -25);
 
     LCD.WriteLine("grab that bell");
     faceAngle2(0);
@@ -91,11 +91,27 @@ int main(void){
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
-    moveY(64, 25);
+    moveY(63.6, 25);
 
     LCD.WriteLine("Search for light");
+    faceAngle2(0);
     scanForLight();
     pushButtons2();
+
+    faceAngle2(2);
+    move(15, -25);
+
+    LCD.WriteLine("Go down the ramp");
+    moveY(42.5, -35);
+
+    LCD.WriteLine("Go down the ramp");
+    moveY(27.7, -35);
+
+    LCD.WriteLine("Lower the magnetic arm");
+    magnetArm.SetDegree(90);
+
+    LCD.WriteLine("Head straight for the launch button");
+    moveRPS(0, 20, -50);
 
     /*
     LCD.WriteLine("CHARGE AND FINISH BABIES");

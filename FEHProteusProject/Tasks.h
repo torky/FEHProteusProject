@@ -41,7 +41,7 @@ void approachDumbbell(){
     faceNorth();
 }
 void grabDumbbell(){
-    rotateMagnet(120);
+    rotateMagnet(115);
     Sleep(1000);
     move(3, 25);
     Sleep(1000);
@@ -92,28 +92,88 @@ void scanForLight(){
     float color = 0;
     while(color == 0){
 
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn right once
+        turn(2, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn right twice
+        turn(2, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn left once
+        turn(-1, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn left twice
+        turn(-1, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn left thrice
+        turn(-1, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
+        //turn left a fourth time
+        turn(-1, 25);
+        Sleep(1000);
+        color = determineColor();
+        if(color!=0){
+            break;
+            break;
+        }
+
 
         //move jaggedly back and forth
-        if(left<=5){
+        if(left<=2){
             //go left
-            turn(1,-25);
+            turn(1,25);
             left++;
             color = determineColor();
             Sleep(1000);
-        }else if(left<=15){
-            turn(1,25);
+        }else if(left<=6){
+            turn(-1,25);
             left++;
             color = determineColor();
             Sleep(1000);
 
         }else{
-            left = -5;
+            left = -2;
         }
         if(color!=0){
             break;
             break;
         }
     }
+    Sleep(5000);
 
 }
 
@@ -151,15 +211,25 @@ void pushButtons2(){
     //Read light
     float color = determineColor();
     //Move based on color
+    //blue bottom
     if(color == BLUE_LIGHT_COLOR){
         LCD.WriteLine("BLUE");
-
+        timedMove(500, 25);
+        Sleep(5000);
     }else if(color == RED_LIGHT_COLOR){
         LCD.WriteLine("RED");
+        move(4,-25);
+        cardArm.SetDegree(10);
+        Sleep(1000);
+        timedMove(500, 25);
+        Sleep(5000);
 
     }else if(color == 0){
         LCD.WriteLine("We failed");
     }
+
+    cardArm.SetDegree(120);
+
     //reverse to get on line
 
 }

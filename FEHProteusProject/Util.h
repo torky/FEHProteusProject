@@ -70,6 +70,7 @@ void getLeverData(bool data[]){
     data[2] = RPS.BlueSwitchDirection()-1;
 }
 
+//subtracts from total value
 static const int rightOffsetForward = 0;
 static const int leftOffsetForward = 0;
 static const int rightOffsetBack = 2;
@@ -200,6 +201,38 @@ void turn(int angle, int percent){
     leftMotor.Stop();
 }
 
+void turn2(int angle, int percent){
+    //Reset encoder counts
+    //LCD.WriteLine("reseting counts");
+    rightEnc.ResetCounts();
+    leftEnc.ResetCounts();
+
+    //LCD.WriteLine("converting");
+    //Convert angle to counts
+    int counts = angle * COUNTS_PER_DEGREE;
+    if(counts < 0){
+        counts = -counts;
+    }
+
+    //LCD.WriteLine("deciding");
+    if(angle < 0){
+        //Set both motors to desired percent
+        rightMotor.SetPercent(percent);
+        leftMotor.SetPercent(0);
+    }else{
+        //Set both motors to desired percent
+        rightMotor.SetPercent(0);
+        leftMotor.SetPercent(percent);
+    }
+
+    //While the average of the left and right encoder are less than counts,
+    //keep running motors
+    while((leftEnc.Counts() + rightEnc.Counts())  < counts);
+
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
 
 void pushArm(float inches){
     cardArm.SetDegree(inches * ARM_DEGREE_PER_INCH);
@@ -448,6 +481,10 @@ void moveRPS(float x, float y, int power){
     headingDegrees = 270+headingDegrees;
     if(headingDegrees>360){
         headingDegrees= headingDegrees - 360;
+    }
+
+    if(headingDegrees<0){
+        headingDegrees = headingDegrees + 360;
     }
 
 
