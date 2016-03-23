@@ -173,7 +173,6 @@ void scanForLight(){
             break;
         }
     }
-    Sleep(5000);
 
 }
 
@@ -215,11 +214,12 @@ void pushButtons2(){
     if(color == BLUE_LIGHT_COLOR){
         LCD.WriteLine("BLUE");
         timedMove(500, 25);
-        Sleep(5000);
+        timedMove(5000, 10);
     }else if(color == RED_LIGHT_COLOR){
         LCD.WriteLine("RED");
         move(4,-25);
         cardArm.SetDegree(10);
+        faceAngle2(0);
         Sleep(1000);
         timedMove(500, 25);
         Sleep(5000);

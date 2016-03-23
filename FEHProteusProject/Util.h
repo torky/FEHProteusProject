@@ -498,7 +498,7 @@ void moveRPS(float x, float y, int power){
     LCD.Write(b);
     LCD.WriteLine(" inches Y");
 
-    Sleep(5000);
+    Sleep(1000);
 
     //if backwards
     if(power<0){
@@ -511,7 +511,7 @@ void moveRPS(float x, float y, int power){
         LCD.WriteLine(headingDegrees);
         LCD.Write("Actual heading: ");
         LCD.WriteLine(RPS.Heading());
-        Sleep(5000);
+        Sleep(1000);
     }
 
     //check if heading is over 360 and adjust
@@ -526,7 +526,7 @@ void moveRPS(float x, float y, int power){
     faceAngle2(headingDegrees);
     LCD.Write("Actual heading------: ");
     LCD.WriteLine(RPS.Heading());
-    Sleep(5000);
+    Sleep(1000);
     move(distance, power);
 
 

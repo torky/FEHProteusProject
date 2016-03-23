@@ -91,7 +91,7 @@ int main(void){
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
-    moveY(63.6, 25);
+    moveY(64, 25);
 
     LCD.WriteLine("Search for light");
     faceAngle2(0);
@@ -107,12 +107,34 @@ int main(void){
     LCD.WriteLine("Go down the ramp");
     moveY(27.7, -35);
 
+    Sleep(500);
+    if(RPS.Y()<23){
+        moveY(26, 25);
+
+    }
+
+    /*LCD.WriteLine("Lower the magnetic arm");
+    magnetArm.SetDegree(50);
+    Sleep(1000);
     LCD.WriteLine("Lower the magnetic arm");
     magnetArm.SetDegree(90);
+    */
 
     LCD.WriteLine("Head straight for the launch button");
-    moveRPS(0, 20, -50);
 
+    faceAngle2(300);
+
+    //moveRPS(0, 17, -50);
+
+    leftMotor.SetPercent(-50);
+    rightMotor.SetPercent(-50);
+    float timeStart = TimeNow();
+    while(TimeNow()-timeStart<3);
+    move(3,25);
+    LCD.WriteLine("Lower the magnetic arm");
+    magnetArm.SetDegree(90);
+    Sleep(100);
+    timedMove(10000, -50);
     /*
     LCD.WriteLine("CHARGE AND FINISH BABIES");
     Sleep(2000);
