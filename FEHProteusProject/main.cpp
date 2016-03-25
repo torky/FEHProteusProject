@@ -78,6 +78,9 @@ float blueLever[2] = {14, 40.4};
 
 int main(void){
     //Necessary initialization code
+    //moveNoRPS(72, 30);
+    //moveNoRPS(72, -30);
+
     RPS.InitializeTouchMenu();
 
     calibrateServos();
@@ -117,23 +120,29 @@ int main(void){
     moveRPS(fuelLight[0],fuelLight[1],25);
 
     LCD.WriteLine("Search for light");
+    turn(5,25);
+    moveNoRPS(.5,-25);
+
     scanForLight();
     pushButtons2();
 
     faceAngle2(2);
     move(15, -25);
+    faceAngle2(0);
 
     LCD.WriteLine("Go down the ramp");
     moveY(42.5, -35);
+    faceAngle2(0);
 
     LCD.WriteLine("Go down the ramp");
     moveY(27.7, -35);
+    faceAngle2(0);
 
     Sleep(500);
     if(RPS.Y()<23){
         moveY(26, 25);
-
     }
+    faceAngle2(0);
 
     /*LCD.WriteLine("Lower the magnetic arm");
     magnetArm.SetDegree(50);
@@ -147,8 +156,11 @@ int main(void){
     faceAngle2(300);
 
     //moveRPS(0, 17, -50);
+    //timedMove(5000, 30);
 
-    leftMotor.SetPercent(-50);
+
+
+    leftMotor.SetPercent(-55);
     rightMotor.SetPercent(-50);
     float timeStart = TimeNow();
     while(TimeNow()-timeStart<3);
@@ -157,6 +169,7 @@ int main(void){
     magnetArm.SetDegree(90);
     Sleep(100);
     timedMove(10000, -50);
+
     /*
     LCD.WriteLine("CHARGE AND FINISH BABIES");
     Sleep(2000);

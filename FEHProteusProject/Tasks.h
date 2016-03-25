@@ -92,7 +92,7 @@ void scanForLight(){
     int left = 0;
     float color = 0;
     while(color == 0){
-    /*
+    ///*
         if(color!=0){
             break;
             break;
@@ -151,7 +151,8 @@ void scanForLight(){
             break;
             break;
         }
-    //*/
+        moveNoRPS(.1,-25);
+    /*
         //Check RPS if this fails
         Sleep(500);
 
@@ -159,12 +160,13 @@ void scanForLight(){
         float fuelLightMinX = fuelLight[0]-.4;
         float fuelLightMaxY = fuelLight[1]+.4;;
         float fuelLightMinY = fuelLight[1]-.4;;
-        Sleep(500);
         color = determineColor();
         if(color!=0){
             return;
         }
-        while(RPS.X()<fuelLightMaxX&&RPS.X()>fuelLightMinX){
+
+        /*
+        if(RPS.X()<fuelLightMaxX&&RPS.X()>fuelLightMinX){
             Sleep(500);
             color = determineColor();
 
@@ -172,14 +174,14 @@ void scanForLight(){
                 return;
             }
             if(RPS.X()>fuelLight[0]){
-                turn(-1,25);
+                turn(-1,20);
             }else{
-                turn(1, 25);
+                turn(1, 20);
             }
-
         }
-
-        while(RPS.Y()<fuelLightMaxY&&RPS.Y()>fuelLightMinY){
+        */
+        /*
+        if(RPS.Y()<fuelLightMaxY&&RPS.Y()>fuelLightMinY){
             Sleep(500);
             color = determineColor();
 
@@ -188,12 +190,15 @@ void scanForLight(){
             }
 
             if(RPS.Y()>fuelLight[1]){
-                move(.125, -25);
+                move(.125, -20);
             }else{
-                move(.125, 25);
+                move(.125, 20);
             }
         }
 
+    //*/
+
+        /*
         //move jaggedly back and forth
         if(left<=2){
             //go left
@@ -212,7 +217,7 @@ void scanForLight(){
         }
         if(color!=0){
             return;
-        }
+        }*/
     }
 
 }
@@ -248,27 +253,40 @@ void pushButtons(){
 }
 
 void pushButtons2(){
-    //Read light
-    float color = determineColor();
-    //Move based on color
-    //blue bottom
-    if(color == BLUE_LIGHT_COLOR){
-        LCD.WriteLine("BLUE");
-        timedMove(500, 25);
-        timedMove(5000, 10);
-    }else if(color == RED_LIGHT_COLOR){
-        LCD.WriteLine("RED");
-        move(4,-25);
-        cardArm.SetDegree(10);
-        faceAngle2(0);
-        Sleep(500);
-        move(7, 25);
-        Sleep(5000);
+    //bool retry = true;
+    //int count = 0;
+    //do{
+        //Read light
+        float color = determineColor();
+        //Move based on color
+        //blue bottom
+        if(color == BLUE_LIGHT_COLOR){
+            LCD.WriteLine("BLUE");
+            timedMove(500, 25);
+            timedMove(5500, 10);
+            //retry = false;
+        }else if(color == RED_LIGHT_COLOR){
+            LCD.WriteLine("RED");
+            move(4,-25);
+            cardArm.SetDegree(10);
+            faceAngle2(0);
+            Sleep(500);
+            timedMove(500, 25);
+            Sleep(5500);
+            //retry = false;
+        }else if(color == 0){
+            LCD.WriteLine("We failed");
+            //retry = true;
+           // count++;
+        }
+    //}while(retry && count < 5);
 
-    }else if(color == 0){
-        LCD.WriteLine("We failed");
-    }
-
+    //If the light was never found, default to blue
+    //if(retry){
+        //LCD.WriteLine("Default guess");
+        //timedMove(500, 25);
+        //timedMove(6000, 10);
+    //}
     cardArm.SetDegree(120);
 
     //reverse to get on line

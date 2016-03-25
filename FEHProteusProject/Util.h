@@ -17,6 +17,7 @@ bool checkColor(float colorValue){
 
 float determineColor2(){
 
+    LCD.Write(CdSButtonSensor.Value());
     if(CdSButtonSensor.Value()<MAX_RED_COLOR){
         LCD.WriteLine("It's red.");
         return MAX_RED_COLOR;
@@ -113,9 +114,9 @@ void getLeverData(bool data[]){
 }
 
 //subtracts from total value
-static const int rightOffsetForward = .14;
+static const int rightOffsetForward = .5;
 static const int leftOffsetForward = 0;
-static const int rightOffsetBack = 0;
+static const int rightOffsetBack = 3.7;
 static const int leftOffsetBack = 0;
 
 void move(float inches, int percent){
@@ -497,7 +498,6 @@ void moveY(float y, int power){
         distance = distance*-1;
     }
     move(distance , power);
-
 
 }
 
