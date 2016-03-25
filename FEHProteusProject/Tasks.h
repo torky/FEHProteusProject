@@ -41,7 +41,7 @@ void approachDumbbell(){
     faceNorth();
 }
 void grabDumbbell(){
-    rotateMagnet(115);
+    rotateMagnet(GRAB_DUMBBELL);
     Sleep(1000);
     move(3, 25);
     Sleep(1000);
@@ -86,12 +86,13 @@ void ascendRamp(){
     faceNorth();
 }
 
+//////////////////////////////////Calibrate with RPS (needs work)
 void scanForLight(){
 
     int left = 0;
     float color = 0;
     while(color == 0){
-
+    /*
         if(color!=0){
             break;
             break;
@@ -150,7 +151,48 @@ void scanForLight(){
             break;
             break;
         }
+    //*/
+        //Check RPS if this fails
+        Sleep(500);
 
+        float fuelLightMaxX = fuelLight[0]+.4;
+        float fuelLightMinX = fuelLight[0]-.4;
+        float fuelLightMaxY = fuelLight[1]+.4;;
+        float fuelLightMinY = fuelLight[1]-.4;;
+        Sleep(500);
+        color = determineColor();
+        if(color!=0){
+            return;
+        }
+        while(RPS.X()<fuelLightMaxX&&RPS.X()>fuelLightMinX){
+            Sleep(500);
+            color = determineColor();
+
+            if(color!=0){
+                return;
+            }
+            if(RPS.X()>fuelLight[0]){
+                turn(-1,25);
+            }else{
+                turn(1, 25);
+            }
+
+        }
+
+        while(RPS.Y()<fuelLightMaxY&&RPS.Y()>fuelLightMinY){
+            Sleep(500);
+            color = determineColor();
+
+            if(color!=0){
+                return;
+            }
+
+            if(RPS.Y()>fuelLight[1]){
+                move(.125, -25);
+            }else{
+                move(.125, 25);
+            }
+        }
 
         //move jaggedly back and forth
         if(left<=2){
@@ -169,8 +211,7 @@ void scanForLight(){
             left = -2;
         }
         if(color!=0){
-            break;
-            break;
+            return;
         }
     }
 
@@ -220,8 +261,8 @@ void pushButtons2(){
         move(4,-25);
         cardArm.SetDegree(10);
         faceAngle2(0);
-        Sleep(1000);
-        timedMove(500, 25);
+        Sleep(500);
+        move(7, 25);
         Sleep(5000);
 
     }else if(color == 0){

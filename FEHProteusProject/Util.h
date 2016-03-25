@@ -5,14 +5,29 @@
 
 bool checkColor(float colorValue){
 
-    float upperColorValue = colorValue+.05;
-    float lowerColorValue = colorValue-.05;
+    float upperColorValue = colorValue+.1;
+    float lowerColorValue = colorValue-.1;
 
     if(CdSButtonSensor.Value()<upperColorValue&&CdSButtonSensor.Value()>lowerColorValue){
         return true;
     }else{
         return false;
     }
+}
+
+float determineColor2(){
+
+    if(CdSButtonSensor.Value()<MAX_RED_COLOR){
+        LCD.WriteLine("It's red.");
+        return MAX_RED_COLOR;
+    }else if(CdSButtonSensor.Value()<MAX_BLUE_COLOR){
+        LCD.WriteLine("It's blue.");
+        return MAX_BLUE_COLOR;
+    }else{
+        LCD.WriteLine("It's not blue or red.");
+        return 0;
+    }
+
 }
 
 float determineColor(){
@@ -31,9 +46,36 @@ float determineColor(){
 void calibrateServos(){
     cardArm.SetMin(CARD_MIN);
     cardArm.SetMax(CARD_MAX);
+    cardArm.SetDegree(90);
 
     magnetArm.SetMin(MAGNET_MIN);
     magnetArm.SetMax(MAGNET_MAX);
+    magnetArm.SetDegree(10);
+}
+
+void calibrateMapPerformanceTest4(){
+    LCD.WriteLine("Dumbbell location: ");
+    magnetArm.SetDegree(GRAB_DUMBBELL);
+    while (!buttons.LeftPressed()){
+        LCD.Write(RPS.X());
+        LCD.Write(", ");
+        LCD.WriteLine(RPS.Y());
+    }
+
+    dumbbellStart[0] = RPS.X();
+    dumbbellStart[1] = RPS.Y();
+    magnetArm.SetDegree(10);
+
+    LCD.WriteLine("Fuel light location: ");
+    while (!buttons.RightPressed()){
+        LCD.Write(RPS.X());
+        LCD.Write(", ");
+        LCD.WriteLine(RPS.Y());
+    }
+
+    fuelLight[0] = RPS.X();
+    fuelLight[1] = RPS.Y();
+
 }
 
 //In order x, y, heading
@@ -71,9 +113,9 @@ void getLeverData(bool data[]){
 }
 
 //subtracts from total value
-static const int rightOffsetForward = 0;
+static const int rightOffsetForward = .14;
 static const int leftOffsetForward = 0;
-static const int rightOffsetBack = 2;
+static const int rightOffsetBack = 0;
 static const int leftOffsetBack = 0;
 
 void move(float inches, int percent){
@@ -429,8 +471,7 @@ void moveX(float x, int power){
         LCD.WriteLine(RPS.X());
         faceAngle2(270);
     }else{
-        LCD.WriteLine(RPS.Y());
-
+        LCD.WriteLine(RPS.X());
         faceAngle2(90);
     }
     float distance = x-RPS.X();
@@ -458,6 +499,52 @@ void moveY(float y, int power){
     move(distance , power);
 
 
+}
+
+void inchX(float x){
+    //turn right 2 inches of change
+    //turn left 8 inches of change
+
+    float power = 25;
+
+    Sleep(200);
+    //Determine difference
+    float difference = x-RPS.X();
+
+    //if difference is too big
+    while(difference<.125){
+        difference = x-RPS.X();
+
+        if(difference<0){
+            move(.125 , -power);
+        }else{
+            move(.125 , power);
+        }
+
+        Sleep(200);
+    }
+
+}
+
+void inchY(float y){
+    float power = 25;
+
+    Sleep(200);
+    //Determine difference
+    float difference = y-RPS.Y();
+
+    //if difference is too big
+    while(difference<.125){
+        difference = y-RPS.Y();
+
+        if(difference<0){
+            move(.125 , -power);
+        }else{
+            move(.125 , power);
+        }
+
+        Sleep(200);
+    }
 }
 
 void moveRPS(float x, float y, int power){
@@ -527,7 +614,7 @@ void moveRPS(float x, float y, int power){
     LCD.Write("Actual heading------: ");
     LCD.WriteLine(RPS.Heading());
     Sleep(1000);
-    move(distance, power);
+    move(distance-3, power);
 
 
 }

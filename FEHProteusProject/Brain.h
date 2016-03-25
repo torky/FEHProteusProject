@@ -11,17 +11,6 @@ static const int LEVER_BLUE = 6;
 static const int DEPOSIT_DUMBELL = 7;
 static const int LAUNCH_BUTTON = 8;
 
-static const float startPoint[2] = {8.3, 13.2};
-static const float finishPoint[2] = {86.4, 7.4};
-static const float dumbbellStart[2] = {27.2, 16.3};
-static const float belowRamp[2] = {27.7, 26};
-static const float aboveRamp[2] = {31, 42.5};
-static const float fuelLight[2] = {26.5, 65.5};
-static const float dumbbellEnd[2] = {5.3, 47.3};
-static const float redLever[2] = {4, 40.4};
-static const float whiteLever[2] = {9, 40.4};
-static const float blueLever[2] = {14, 40.4};
-
 bool tasksCompleted[9];
 
 int points = 0;

@@ -33,10 +33,15 @@ static const float BLUE_COLOR = 0.96;
 static const float BLACK_COLOR = 3.0;
 
 //Need CdS value for reading the right color
-static const float RED_LIGHT_COLOR = .42;
-static const float BLUE_LIGHT_COLOR = .84;
+static const float RED_LIGHT_COLOR = .40;
+static const float BLUE_LIGHT_COLOR = .80;
 static const float YELLOW_LINE_COLOR = 1.03;
 static const float BLACK_BACKGROUND_COLOR = 1.27;
+
+//If below, then red
+static const float MAX_RED_COLOR = .5;
+//If below then blue
+static const float MAX_BLUE_COLOR = .9;
 
 static const float LINE_SURFACE = 2.00;
 //Motor and wheel constants
@@ -52,6 +57,19 @@ static const float CARD_MIN = 510;
 static const float CARD_MAX = 2389;
 static const float MAGNET_MIN = 508;
 static const float MAGNET_MAX = 2430;
+static const float GRAB_DUMBBELL = 110;
+
+//Brain
+float startPoint[2] = {8.3, 13.2};
+float finishPoint[2] = {86.4, 7.4};
+float dumbbellStart[2] = {27.7, 16};
+float belowRamp[2] = {27.7, 26};
+float aboveRamp[2] = {31, 42.5};
+float fuelLight[2] = {26.5, 65.5};
+float dumbbellEnd[2] = {5.3, 47.3};
+float redLever[2] = {4, 40.4};
+float whiteLever[2] = {9, 40.4};
+float blueLever[2] = {14, 40.4};
 
 #include "Optosensor.h"
 #include "Util.h"
@@ -61,7 +79,10 @@ static const float MAGNET_MAX = 2430;
 int main(void){
     //Necessary initialization code
     RPS.InitializeTouchMenu();
+
     calibrateServos();
+    calibrateMapPerformanceTest4();
+
     LCD.Clear();
 
     /////PERFORMANCE TEST 4/////
@@ -73,10 +94,11 @@ int main(void){
     move(15, 35);
 
     LCD.WriteLine("Move to right x with 6.5 inch adjust");
-    moveX(33.2,25);
+    moveX(dumbbellStart[0]+6.5, 25);
 
     LCD.WriteLine("Move to back perfectly???");
-    moveY(16.55, -25);
+    moveY(dumbbellStart[1], -25);
+    inchY(dumbbellStart[1]);
 
     LCD.WriteLine("grab that bell");
     faceAngle2(0);
@@ -91,10 +113,10 @@ int main(void){
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
-    moveY(64, 25);
+    moveY(fuelLight[1]-10, 25);
+    moveRPS(fuelLight[0],fuelLight[1],25);
 
     LCD.WriteLine("Search for light");
-    faceAngle2(0);
     scanForLight();
     pushButtons2();
 
