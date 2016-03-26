@@ -34,14 +34,14 @@ static const float BLACK_COLOR = 3.0;
 
 //Need CdS value for reading the right color
 static const float RED_LIGHT_COLOR = .40;
-static const float BLUE_LIGHT_COLOR = .80;
-static const float YELLOW_LINE_COLOR = 1.03;
-static const float BLACK_BACKGROUND_COLOR = 1.27;
+float BLUE_LIGHT_COLOR = 1.0;
+static const float YELLOW_LINE_COLOR = 2.03;
+static const float BLACK_BACKGROUND_COLOR = 2.27;
 
 //If below, then red
 static const float MAX_RED_COLOR = .5;
 //If below then blue
-static const float MAX_BLUE_COLOR = .9;
+static const float MAX_BLUE_COLOR = 1.0;
 
 static const float LINE_SURFACE = 2.00;
 //Motor and wheel constants
@@ -117,7 +117,9 @@ int main(void){
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
     moveY(fuelLight[1]-10, 25);
-    moveRPS(fuelLight[0],fuelLight[1],25);
+    faceAngle2(0);
+    moveY(fuelLight[1],25);
+    //moveRPS(fuelLight[0],fuelLight[1],25);
 
     LCD.WriteLine("Search for light");
     turn(5,25);
@@ -125,6 +127,7 @@ int main(void){
 
     scanForLight();
     pushButtons2();
+    LCD.WriteLine(colorString);
 
     faceAngle2(2);
     move(15, -25);

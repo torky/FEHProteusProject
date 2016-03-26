@@ -73,9 +73,20 @@ void calibrateMapPerformanceTest4(){
         LCD.Write(", ");
         LCD.WriteLine(RPS.Y());
     }
+    if(RPS.X()>50){
 
-    fuelLight[0] = RPS.X();
-    fuelLight[1] = RPS.Y();
+        fuelLight[0] = RPS.X();
+        fuelLight[1] = RPS.Y();
+    }
+
+    /*LCD.WriteLine("Color Blue: ");
+    while (!buttons.MiddlePressed()){
+
+        LCD.WriteLine(CdSButtonSensor.Value());
+    }
+
+    BLUE_LIGHT_COLOR = CdSButtonSensor.Value();
+        */
 
 }
 

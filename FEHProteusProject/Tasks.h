@@ -91,11 +91,12 @@ void scanForLight(){
 
     int left = 0;
     float color = 0;
-    while(color == 0){
+    float timeStart = TimeNow();
+
+    while(color == 0&&TimeNow()-timeStart<10){
     ///*
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn right once
@@ -103,8 +104,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn right twice
@@ -112,8 +112,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn left once
@@ -121,8 +120,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn left twice
@@ -130,8 +128,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn left thrice
@@ -139,8 +136,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
 
         //turn left a fourth time
@@ -148,8 +144,7 @@ void scanForLight(){
         Sleep(1000);
         color = determineColor();
         if(color!=0){
-            break;
-            break;
+            return;
         }
         moveNoRPS(.1,-25);
     /*
@@ -220,6 +215,11 @@ void scanForLight(){
         }*/
     }
 
+    if(TimeNow()-timeStart>10){
+        timedMove(500,25);
+        timedMove(5500,10);
+    }
+
 }
 
 void pushButtons(){
@@ -252,6 +252,8 @@ void pushButtons(){
 
 }
 
+char colorString;
+
 void pushButtons2(){
     //bool retry = true;
     //int count = 0;
@@ -262,6 +264,7 @@ void pushButtons2(){
         //blue bottom
         if(color == BLUE_LIGHT_COLOR){
             LCD.WriteLine("BLUE");
+            colorString = 'b';
             timedMove(500, 25);
             timedMove(5500, 10);
             //retry = false;
@@ -273,6 +276,7 @@ void pushButtons2(){
             Sleep(500);
             timedMove(500, 25);
             Sleep(5500);
+            colorString = 'r';
             //retry = false;
         }else if(color == 0){
             LCD.WriteLine("We failed");
