@@ -50,13 +50,19 @@ void grabDumbbell(){
 }
 
 void scrapeDumbbell(){
+    Sleep(500);
     rotateMagnet(100);
-    Sleep(1000);
+    Sleep(200);
     move(5, 35);
-    Sleep(1000);
+    Sleep(200);
     rotateMagnet(30);
-    Sleep(1000);
-    timedMove(1000, -35);
+    Sleep(200);
+    timedMove(500, -50);
+
+    rotateMagnet(100);
+    Sleep(200);
+    rotateMagnet(30);
+    Sleep(200);
     move(5, 35);
 
 }
@@ -98,16 +104,37 @@ void scanForLight(){
     rightMotor.SetPercent(25);
     float a = fuelLight[0]-RPS.X();
     float b = fuelLight[1]-RPS.Y();
-    float inches = sqrt(a*a-b*b);
+    float inches = sqrt(a*a+b*b);
+    float angle = acos(a/inches);
+    float angleDegrees = angle/PI*180;
+    //normalize angle for our robot
+    angleDegrees+=270;
+    //fix angle if it's not between 0 and 360
+    if(angleDegrees>360){
+        angleDegrees-=360;
+    }else if(angleDegrees <0){
+        angleDegrees+=360;
+    }
+
+    Sleep(200);
+    //faceAngle(angleDegrees);
+
     int counts = inches * COUNTS_PER_INCH;
+    rightMotor.SetPercent(20);
+    leftMotor.SetPercent(20);
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
-        if(CdSButtonSensor.Value<1.5){
+        LCD.WriteLine(CdSButtonSensor.Value());
+        if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2){
+            rightMotor.Stop();
+            leftMotor.Stop();
             return;
         }
     }
 
-    while(color == 0&&TimeNow()-timeStart<10){
-    ///*
+
+
+    //while(color == 0&&TimeNow()-timeStart<10){
+    /*
         if(color!=0){
             return;
         }
@@ -226,12 +253,12 @@ void scanForLight(){
         if(color!=0){
             return;
         }*/
-    }
+    /*}
 
     if(TimeNow()-timeStart>10){
         timedMove(500,25);
         timedMove(5500,10);
-    }
+    }*/
 
 }
 
@@ -272,6 +299,7 @@ void pushButtons2(){
     //int count = 0;
     //do{
         //Read light
+    Sleep(200);
         float color = determineColor();
         //Move based on color
         //blue bottom
@@ -280,21 +308,26 @@ void pushButtons2(){
             colorString = 'b';
             timedMove(500, 25);
             timedMove(5500, 10);
+            moveNoRPS(5,-25);
             //retry = false;
         }else if(color == RED_LIGHT_COLOR){
             LCD.WriteLine("RED");
             move(4,-25);
-            cardArm.SetDegree(10);
+            cardArm.SetDegree(7);
             faceAngle2(0);
             Sleep(500);
-            timedMove(500, 25);
+            timedMove(300, 25);
+            timedMove(700, 10);
             Sleep(5500);
             colorString = 'r';
             //retry = false;
-        }else if(color == 0){
-            LCD.WriteLine("We failed");
-            //retry = true;
-           // count++;
+        }else {
+            LCD.WriteLine("We failed: DEFAULT BLUE");
+            colorString = 'b';
+            timedMove(500, 25);
+            timedMove(5500, 10);
+            moveNoRPS(5,-25);
+            //retry = false;
         }
     //}while(retry && count < 5);
 

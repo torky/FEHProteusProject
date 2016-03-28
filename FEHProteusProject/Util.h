@@ -79,14 +79,14 @@ void calibrateMapPerformanceTest4(){
         fuelLight[1] = RPS.Y();
     }
 
-    /*LCD.WriteLine("Color Blue: ");
+    //LCD.WriteLine("Color Blue: ");
     while (!buttons.MiddlePressed()){
 
-        LCD.WriteLine(CdSButtonSensor.Value());
+        LCD.WriteLine(RPS.X());
     }
 
-    BLUE_LIGHT_COLOR = CdSButtonSensor.Value();
-        */
+    dumbbellEnd[0] = RPS.X();
+        //*/
 
 }
 

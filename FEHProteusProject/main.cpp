@@ -35,7 +35,7 @@ static const float BLACK_COLOR = 3.0;
 //Need CdS value for reading the right color
 static const float RED_LIGHT_COLOR = .40;
 float BLUE_LIGHT_COLOR = 1.0;
-static const float YELLOW_LINE_COLOR = 2.03;
+static const float YELLOW_LINE_COLOR = .9;//lowest possible
 static const float BLACK_BACKGROUND_COLOR = 2.27;
 
 //If below, then red
@@ -88,7 +88,7 @@ int main(void){
 
     LCD.Clear();
 
-    /////PERFORMANCE TEST 4/////
+    /////PERFORMANCE TEST 4 first half/////
 
     LCD.WriteLine("Start wait");
     startWait();
@@ -127,6 +127,54 @@ int main(void){
     pushButtons2();
     LCD.WriteLine(colorString);
 
+    ////////////////////////////////second half of perf 3
+    ///
+    //D move to 55.3, H move to 56.3
+    LCD.WriteLine("Face north and align Y 57.3");
+    faceAngle2(0);
+    moveY(55.3, -25);
+
+    LCD.WriteLine("Align x with 2 inch adjust");
+    faceAngle2(90);
+    moveNoRPS(22.5, 25);
+
+    LCD.WriteLine("Face south and move back");
+    Sleep(2000);
+    turn(-85,25);
+    moveNoRPS(3, 25);
+    faceAngle2(180);
+    moveNoRPS(6.5, -25);
+
+    LCD.WriteLine("Scrape dumbbell");
+    Sleep(200);
+    scrapeDumbbell();
+
+    ////////////////////////////////perf test 2
+    //Position in front of
+    moveNoRPS(5, 25);
+    moveY(40.4,25);
+    Sleep(1000);
+    cardArm.SetDegree(15.0);
+    Sleep(1000);
+    //pulling the lever
+    moveNoRPS(1.5, -20);
+    //lift arm
+    cardArm.SetDegree(60.0);
+    //reverse
+    moveNoRPS(6, -25);
+    turn(-90, 20);
+    moveNoRPS(3.25, 25);
+    //fdace lever 2
+    turn(90, 20);
+    cardArm.SetDegree(15.0);
+    Sleep(1000);
+    moveNoRPS(3, 25);
+    faceAngle(180);
+    moveNoRPS(2.5, 25);
+
+    ////////////////////////////////go to the front of the ramp
+    moveX(aboveRamp[0]+6,25);
+    ////////////////////////////////last half of 4
     faceAngle2(2);
     move(15, -25);
     faceAngle2(0);
