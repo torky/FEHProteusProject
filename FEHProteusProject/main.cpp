@@ -118,12 +118,10 @@ int main(void){
     faceAngle2(0);
     moveY(fuelLight[1]-10, 25);
     faceAngle2(0);
-    moveY(fuelLight[1],25);
+
     //moveRPS(fuelLight[0],fuelLight[1],25);
 
     LCD.WriteLine("Search for light");
-    turn(5,25);
-    moveNoRPS(.5,-25);
 
     scanForLight();
     pushButtons2();

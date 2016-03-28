@@ -89,9 +89,22 @@ void ascendRamp(){
 //////////////////////////////////Calibrate with RPS (needs work)
 void scanForLight(){
 
+    Sleep(150);
     int left = 0;
     float color = 0;
     float timeStart = TimeNow();
+
+    leftMotor.SetPercent(25);
+    rightMotor.SetPercent(25);
+    float a = fuelLight[0]-RPS.X();
+    float b = fuelLight[1]-RPS.Y();
+    float inches = sqrt(a*a-b*b);
+    int counts = inches * COUNTS_PER_INCH;
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
+        if(CdSButtonSensor.Value<1.5){
+            return;
+        }
+    }
 
     while(color == 0&&TimeNow()-timeStart<10){
     ///*
