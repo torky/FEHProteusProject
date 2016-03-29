@@ -84,6 +84,7 @@ int main(void){
     RPS.InitializeTouchMenu();
 
     calibrateServos();
+
     calibrateMapPerformanceTest4();
 
     LCD.Clear();
@@ -151,26 +152,9 @@ int main(void){
 
     ////////////////////////////////perf test 2
     //Position in front of
-    moveNoRPS(5, 25);
-    moveY(40.4,25);
-    Sleep(1000);
-    cardArm.SetDegree(15.0);
-    Sleep(1000);
-    //pulling the lever
-    moveNoRPS(1.5, -20);
-    //lift arm
-    cardArm.SetDegree(60.0);
-    //reverse
-    moveNoRPS(6, -25);
-    turn(-90, 20);
-    moveNoRPS(3.25, 25);
-    //fdace lever 2
-    turn(90, 20);
-    cardArm.SetDegree(15.0);
-    Sleep(1000);
-    moveNoRPS(3, 25);
-    faceAngle(180);
-    moveNoRPS(2.5, 25);
+
+    //Expects robot to be at container
+    doLevers();
 
     ////////////////////////////////go to the front of the ramp
     moveX(aboveRamp[0]+6,25);

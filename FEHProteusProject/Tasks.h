@@ -66,6 +66,82 @@ void scrapeDumbbell(){
     move(5, 35);
 
 }
+void doLever(bool direction){
+    if(!direction){
+        LCD.WriteLine("Forward");
+        cardArm.SetDegree(15.0);
+        Sleep(300);
+        moveNoRPS(2, 35);
+        //Return to back
+        moveNoRPS(7, -35);
+        cardArm.SetDegree(100.0);
+    }else{
+        LCD.WriteLine("Backward");
+        moveNoRPS(2, 35);
+        cardArm.SetDegree(15.0);
+        LCD.WriteLine("Position to Pull Backward");
+        Sleep(1000);
+        moveNoRPS(1.5, -25);
+        cardArm.SetDegree(100.0);
+        moveNoRPS(1.5, 25);
+        LCD.WriteLine("Pulled and lfted");
+        Sleep(1000);
+        //Return to back
+        moveNoRPS(7, -35);
+    }
+}
+
+void doLevers(){
+    //Get data
+    float pos[3];
+    getRPSData(pos);
+    //Align behind 1
+    turn(5, 35);
+    Sleep(1000);
+    moveNoRPS(5.5, 35);
+    Sleep(1000);
+    if(pos[2] > 0){
+        faceAngle2(180);
+    }else{
+        turn(-2, 35);
+    }
+    //Now is aligned behind lever one
+    bool data[3];
+    getLeverData(data);
+    Sleep(2000);
+
+    //Do one
+    doLever(data[0]);
+
+    //Go to two
+    Sleep(1000);
+    turn(-90, 25);
+    Sleep(500);
+    moveNoRPS(3, 35);
+    Sleep(500);
+    turn(90, 25);
+    Sleep(1000);
+    //approach distance
+    moveNoRPS(5, 35);
+
+    //Do two
+    doLever(data[1]);
+
+    //Go to three
+    Sleep(1000);
+    turn(-90, 25);
+    Sleep(500);
+    moveNoRPS(3, 35);
+    Sleep(500);
+    turn(90, 25);
+    faceAngle2(180);
+    Sleep(1000);
+    //approach
+    moveNoRPS(4.5, 35);
+
+    //do three
+    doLever(data[2]);
+}
 
 void approachRamp(){
     //Move to the ramp

@@ -116,7 +116,7 @@ void getRPSData(float data[]){
     }
 }
 
-//False is forward, true is backwards
+//False is forward (to lower level), true is backwards
 //In order red, white, blue
 void getLeverData(bool data[]){
     data[0] = RPS.RedSwitchDirection()-1;
