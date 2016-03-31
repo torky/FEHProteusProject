@@ -5,7 +5,11 @@
 
 //Precondition: Robot is above light
 void startWait(){
-    while(readLight(CdS) != 'r');
+    float timeStart = TimeNow();
+    while(readLight(CdS) != 'r'&&TimeNow()-timeStart<30){
+        LCD.WriteLine(CdS.Value());
+    }
+
 }
 
 //Precondition:  Robot is at start
@@ -50,7 +54,8 @@ void grabDumbbell(){
 }
 
 void scrapeDumbbell(){
-    Sleep(500);
+    rotateMagnet(50);
+    Sleep(200);
     rotateMagnet(100);
     Sleep(200);
     move(5, 35);
@@ -61,13 +66,12 @@ void scrapeDumbbell(){
 
     rotateMagnet(100);
     Sleep(200);
-    rotateMagnet(30);
+    rotateMagnet(10);
     Sleep(200);
-    move(5, 35);
-
 }
 void doLever(bool direction){
     if(!direction){
+        //towards bottom
         LCD.WriteLine("Forward");
         cardArm.SetDegree(15.0);
         Sleep(300);
@@ -78,6 +82,7 @@ void doLever(bool direction){
     }else{
         LCD.WriteLine("Backward");
         moveNoRPS(2, 35);
+        faceAngle2(180);
         cardArm.SetDegree(15.0);
         LCD.WriteLine("Position to Pull Backward");
         Sleep(1000);
@@ -91,15 +96,52 @@ void doLever(bool direction){
     }
 }
 
+void doLever2(bool direction){
+    if(!direction){
+        //towards bottom
+        LCD.WriteLine("Forward");
+        cardArm.SetDegree(15.0);
+        Sleep(200);
+        if(RPS.X()!=-1){
+            if(RPS.Y()>=redLever[1]+.125){
+                moveY(redLever[1],25);
+            }
+        }else{
+            moveNoRPS(2, 35);
+        }
+        //Return to back
+        moveNoRPS(5, -35);
+        cardArm.SetDegree(100.0);
+    }else{
+        LCD.WriteLine("Backward");
+        if(RPS.Y()>=redLever[1]+.125){
+            moveY(redLever[1],25);
+        }else{
+            moveNoRPS(2, 35);
+        }
+        faceAngle2(180);
+        cardArm.SetDegree(15.0);
+        LCD.WriteLine("Position to Pull Backward");
+        Sleep(200);
+        moveNoRPS(1.5, -25);
+        cardArm.SetDegree(100.0);
+        moveNoRPS(1.5, 25);
+        LCD.WriteLine("Pulled and lifted");
+        //Sleep(1000);
+        //Return to back
+        moveNoRPS(5, -35);
+    }
+}
+
 void doLevers(){
     //Get data
     float pos[3];
-    getRPSData(pos);
     //Align behind 1
-    turn(5, 35);
-    Sleep(1000);
+    turn(20, 35);
+    Sleep(200);
     moveNoRPS(5.5, 35);
-    Sleep(1000);
+    Sleep(200);
+    getRPSData(pos);
     if(pos[2] > 0){
         faceAngle2(180);
     }else{
@@ -108,39 +150,39 @@ void doLevers(){
     //Now is aligned behind lever one
     bool data[3];
     getLeverData(data);
-    Sleep(2000);
+    Sleep(200);
 
     //Do one
-    doLever(data[0]);
+    doLever2(data[0]);
 
     //Go to two
-    Sleep(1000);
+    Sleep(200);
     turn(-90, 25);
-    Sleep(500);
     moveNoRPS(3, 35);
-    Sleep(500);
+    Sleep(200);
     turn(90, 25);
-    Sleep(1000);
     //approach distance
-    moveNoRPS(5, 35);
+    moveNoRPS(2, 35);
 
     //Do two
-    doLever(data[1]);
+    doLever2(data[1]);
 
     //Go to three
-    Sleep(1000);
+    //Sleep(200);
     turn(-90, 25);
-    Sleep(500);
+    //Sleep(200);
     moveNoRPS(3, 35);
-    Sleep(500);
+    //Sleep(200);
     turn(90, 25);
     faceAngle2(180);
-    Sleep(1000);
+    //Sleep(200);
     //approach
-    moveNoRPS(4.5, 35);
+    //moveNoRPS(2.5, 35);
+    moveNoRPS(.5, 25);
 
     //do three
-    doLever(data[2]);
+    doLever2(data[2]);
+    moveNoRPSCalibrated(2, 25);
 }
 
 void approachRamp(){
@@ -166,6 +208,46 @@ void ascendRamp(){
     //Scooch forward
     moveNoRPS(1, 25);
     faceNorth();
+}
+
+char colorString;
+
+void pushButtons(){
+    //bool retry = true;
+    //int count = 0;
+    //do{
+        //Read light
+    Sleep(200);
+        float color = determineColor();
+        //Move based on color
+        //blue bottom
+        if(color == BLUE_LIGHT_COLOR){
+            LCD.WriteLine("BLUE");
+            colorString = 'b';
+            timedMove(500, 25);
+            timedMove(5500, 10);
+            moveNoRPS(5,-25);
+        }else if(color == RED_LIGHT_COLOR){
+            LCD.WriteLine("RED");
+            move(4,-25);
+            cardArm.SetDegree(10);
+            faceAngle2(0);
+            //Sleep(500);
+            timedMove(300, 25);
+            timedMove(600, 20);
+            Sleep(5500);
+            colorString = 'r';
+        }else {
+            LCD.WriteLine("We failed: DEFAULT BLUE");
+            colorString = 'b';
+            timedMove(500, 25);
+            timedMove(5500, 10);
+            moveNoRPS(5,-25);
+        }
+    cardArm.SetDegree(120);
+
+    //reverse to get on line
+
 }
 
 //////////////////////////////////Calibrate with RPS (needs work)
@@ -196,226 +278,34 @@ void scanForLight(){
     //faceAngle(angleDegrees);
 
     int counts = inches * COUNTS_PER_INCH;
-    rightMotor.SetPercent(20);
+    rightMotor.SetPercent(20*rightOffsetForward);
     leftMotor.SetPercent(20);
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
+        LCD.Write("CdS:");
         LCD.WriteLine(CdSButtonSensor.Value());
         if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2){
             rightMotor.Stop();
             leftMotor.Stop();
-            return;
-        }
-    }
 
-
-
-    //while(color == 0&&TimeNow()-timeStart<10){
-    /*
-        if(color!=0){
-            return;
-        }
-
-        //turn right once
-        turn(2, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        //turn right twice
-        turn(2, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        //turn left once
-        turn(-1, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        //turn left twice
-        turn(-1, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        //turn left thrice
-        turn(-1, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        //turn left a fourth time
-        turn(-1, 25);
-        Sleep(1000);
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-        moveNoRPS(.1,-25);
-    /*
-        //Check RPS if this fails
-        Sleep(500);
-
-        float fuelLightMaxX = fuelLight[0]+.4;
-        float fuelLightMinX = fuelLight[0]-.4;
-        float fuelLightMaxY = fuelLight[1]+.4;;
-        float fuelLightMinY = fuelLight[1]-.4;;
-        color = determineColor();
-        if(color!=0){
-            return;
-        }
-
-        /*
-        if(RPS.X()<fuelLightMaxX&&RPS.X()>fuelLightMinX){
-            Sleep(500);
-            color = determineColor();
-
-            if(color!=0){
-                return;
-            }
-            if(RPS.X()>fuelLight[0]){
-                turn(-1,20);
-            }else{
-                turn(1, 20);
-            }
-        }
-        */
-        /*
-        if(RPS.Y()<fuelLightMaxY&&RPS.Y()>fuelLightMinY){
-            Sleep(500);
-            color = determineColor();
-
-            if(color!=0){
-                return;
-            }
-
-            if(RPS.Y()>fuelLight[1]){
-                move(.125, -20);
-            }else{
-                move(.125, 20);
-            }
-        }
-
-    //*/
-
-        /*
-        //move jaggedly back and forth
-        if(left<=2){
-            //go left
-            turn(1,25);
-            left++;
-            color = determineColor();
-            Sleep(1000);
-        }else if(left<=6){
-            turn(-1,25);
-            left++;
-            color = determineColor();
-            Sleep(1000);
-
-        }else{
-            left = -2;
-        }
-        if(color!=0){
-            return;
-        }*/
-    /*}
-
-    if(TimeNow()-timeStart>10){
-        timedMove(500,25);
-        timedMove(5500,10);
-    }*/
-
-}
-
-void pushButtons(){
-    //Move to buttons
-    faceNorth();
-    //push a button
-    moveNoRPS(8, 25);
-    faceNorth();
-    //Change this so it is over light
-    moveNoRPS(7.0, 25);
-
-    //dirty button press
-    timedMove(1000, 20);
-    Sleep(5000);
-
-    //True press
-    //Read light
-    char color = readLight(midOpt);
-    //Move based on color
-    if(color == 'r'){
-
-    }else if(color == 'b'){
-
-    }else if(color == 'n'){
-
-    }else{
-
-    }
-    //reverse to get on line
-
-}
-
-char colorString;
-
-void pushButtons2(){
-    //bool retry = true;
-    //int count = 0;
-    //do{
-        //Read light
-    Sleep(200);
-        float color = determineColor();
-        //Move based on color
-        //blue bottom
-        if(color == BLUE_LIGHT_COLOR){
-            LCD.WriteLine("BLUE");
-            colorString = 'b';
-            timedMove(500, 25);
-            timedMove(5500, 10);
-            moveNoRPS(5,-25);
-            //retry = false;
-        }else if(color == RED_LIGHT_COLOR){
             LCD.WriteLine("RED");
             move(4,-25);
-            cardArm.SetDegree(7);
+            cardArm.SetDegree(10);
             faceAngle2(0);
-            Sleep(500);
+            //Sleep(500);
             timedMove(300, 25);
-            timedMove(700, 10);
+            timedMove(600, 20);
             Sleep(5500);
             colorString = 'r';
-            //retry = false;
-        }else {
-            LCD.WriteLine("We failed: DEFAULT BLUE");
-            colorString = 'b';
-            timedMove(500, 25);
-            timedMove(5500, 10);
-            moveNoRPS(5,-25);
-            //retry = false;
+            cardArm.SetDegree(120);
+
+            return;
         }
-    //}while(retry && count < 5);
-
-    //If the light was never found, default to blue
-    //if(retry){
-        //LCD.WriteLine("Default guess");
-        //timedMove(500, 25);
-        //timedMove(6000, 10);
-    //}
-    cardArm.SetDegree(120);
-
-    //reverse to get on line
-
+    }
+    if(colorString!='r'){
+        pushButtons();
+    }
 }
+
+
+
 #endif
