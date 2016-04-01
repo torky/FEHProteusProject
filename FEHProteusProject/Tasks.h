@@ -9,6 +9,9 @@ void startWait(){
     while(readLight(CdS) != 'r'&&TimeNow()-timeStart<30){
         LCD.WriteLine(CdS.Value());
     }
+    LCD.Clear();
+    LCD.Write("Light value is ");
+    LCD.WriteLine(CdS.Value());
 
 }
 
@@ -114,8 +117,8 @@ void doLever2(bool direction){
         cardArm.SetDegree(100.0);
     }else{
         LCD.WriteLine("Backward");
-        if(RPS.Y()>=redLever[1]+.125){
-            moveY(redLever[1],25);
+        if(RPS.Y()>=redLever[1]-1.0){
+            moveY(redLever[1]-1.0,25);
         }else{
             moveNoRPS(2, 35);
         }
@@ -137,10 +140,12 @@ void doLevers(){
     //Get data
     float pos[3];
     //Align behind 1
-    turn(20, 35);
+    turn(15, 35);
     Sleep(200);
-    moveNoRPS(5.5, 35);
+    timedMove(750, 25);
+    //moveNoRPS(5.5, 35);
     Sleep(200);
+    moveNoRPSCalibrated(.125, -25);
     getRPSData(pos);
     if(pos[2] > 0){
         faceAngle2(180);
@@ -171,7 +176,7 @@ void doLevers(){
     //Sleep(200);
     turn(-90, 25);
     //Sleep(200);
-    moveNoRPS(3, 35);
+    moveNoRPS(3.25, 35);
     //Sleep(200);
     turn(90, 25);
     faceAngle2(180);
@@ -254,9 +259,9 @@ void pushButtons(){
 void scanForLight(){
 
     Sleep(150);
-    int left = 0;
-    float color = 0;
-    float timeStart = TimeNow();
+//    int left = 0;
+//    float color = 0;
+//    float timeStart = TimeNow();
 
     leftMotor.SetPercent(25);
     rightMotor.SetPercent(25);
@@ -283,6 +288,11 @@ void scanForLight(){
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
         LCD.Write("CdS:");
         LCD.WriteLine(CdSButtonSensor.Value());
+
+        leftMotor.SetPercent(20);
+        float difference = leftEnc.Counts()-rightEnc.Counts();
+        rightMotor.SetPercent(20+difference*k);
+
         if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2){
             rightMotor.Stop();
             leftMotor.Stop();

@@ -79,16 +79,26 @@ void calibrateMapPerformanceTest4(){
         fuelLight[1] = RPS.Y();
     }
 
+    magnetArm.SetDegree(100);
+    cardArm.SetDegree(15);
+
     //LCD.WriteLine("Color Blue: ");
     while (!buttons.MiddlePressed()){
 
-        LCD.WriteLine(RPS.X());
+        LCD.Write(RPS.X());
+        LCD.Write(", ");
+        LCD.WriteLine(RPS.Y());
+
     }
 
     if(RPS.X()>3){
 
-    dumbbellEnd[0] = RPS.X();
+        dumbbellEnd[XValue] = RPS.X();
+        redLever[YValue] = RPS.Y();
     }
+
+    cardArm.SetDegree(100);
+    magnetArm.SetDegree(10);
         //*/
 
 }
@@ -234,6 +244,47 @@ void moveNoRPSCalibrated(float inches, int percent){
     rightMotor.Stop();
     leftMotor.Stop();
 }
+
+void moveStraight(float inches, float percent){
+    //Reset encoder counts
+    rightEnc.ResetCounts();
+    leftEnc.ResetCounts();
+
+
+
+    //Set left and right motor percentages
+    if(percent<0){
+        rightMotor.SetPercent(percent*rightOffsetBack);
+        leftMotor.SetPercent(percent*leftOffsetBack);
+    }else{
+        rightMotor.SetPercent(percent*rightOffsetForward);
+        leftMotor.SetPercent(percent*leftOffsetForward);
+    }
+
+
+    //LCD.WriteLine("set percentages");
+    //Convert the inches to a value for shaft encoding
+    int counts = inches/CALIBRATE;
+    //LCD.WriteLine(counts);
+    //Drive the specified number of cycles and or distance
+    float timeStart = TimeNow();
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<5){
+        leftMotor.SetPercent(percent);
+        float difference = leftEnc.Counts()-rightEnc.Counts();
+        if(percent<0){
+            rightMotor.SetPercent(percent-difference*k);
+        }else{
+            rightMotor.SetPercent(percent+difference*k);
+        }
+    }
+
+    //LCD.WriteLine(leftEnc.Counts());
+    //LCD.WriteLine(rightEnc.Counts());
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+
 void timedMove(int millis, int percent){
     //Set left and right motor percentages
     if(percent < 0){
@@ -509,6 +560,11 @@ void faceAngle2(float angle){
 void moveX(float x, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
+
+    if(RPS.X()==-1){
+        Sleep(100);
+    }
+
     if(x-RPS.X()>0){
         LCD.WriteLine(RPS.X());
         faceAngle2(270);
@@ -520,7 +576,7 @@ void moveX(float x, int power){
     if(distance<0){
         distance = distance*-1;
     }
-    move(distance , power);
+    moveStraight(distance , power);
 
 }
 
@@ -529,6 +585,9 @@ void moveX(float x, int power){
 void moveY(float y, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
+    if(RPS.Y()==-1){
+        Sleep(100);
+    }
     if((y-RPS.Y())*power>0){
         faceAngle2(0);
     }else{
@@ -538,7 +597,7 @@ void moveY(float y, int power){
     if(distance<0){
         distance = distance*-1;
     }
-    move(distance , power);
+    moveStraight(distance , power);
 
 }
 

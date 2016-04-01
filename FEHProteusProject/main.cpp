@@ -66,6 +66,9 @@ static const float leftOffsetForward = 1;
 static const float rightOffsetBack = 1-(929-896)/896;
 static const float leftOffsetBack = 0;
 
+static const float k = .6;
+static const int XValue = 0;
+static const int YValue = 1;
 //Brain
 float startPoint[2] = {8.3, 13.2};
 float finishPoint[2] = {86.4, 7.4};
@@ -88,6 +91,13 @@ int main(void){
     //moveNoRPS(72, 30);
     //moveNoRPS(72, -30);
 
+//    moveForwardStraight(10, 20);
+//    LCD.Write("Right Encoder: ");
+//    LCD.WriteLine(rightEnc.Counts());
+//    LCD.Write("Left Encoder: ");
+//    LCD.WriteLine(leftEnc.Counts());
+
+//    Sleep(100000);
     RPS.InitializeTouchMenu();
 
     calibrateServos();
@@ -105,35 +115,35 @@ int main(void){
     move(15, 35);
 
     LCD.WriteLine("Move to right x with 6.5 inch adjust");
-    moveX(dumbbellStart[0]+6.5, 25);
+    moveX(dumbbellStart[XValue]+6.5, 25);
 
     LCD.WriteLine("Move to back perfectly???");
-    moveY(dumbbellStart[1], -25);
-    inchY(dumbbellStart[1]);
+    moveY(dumbbellStart[YValue], -25);
+    inchY(dumbbellStart[YValue]);
 
     LCD.WriteLine("grab that bell");
     faceAngle2(0);
 
-    if(RPS.X()+.25<dumbbellStart[0]){
-        turn(-3, 25);
-    }else if(RPS.X()-.25>dumbbellStart[0]){
-        turn(3, 25);
-    }
+//    if(RPS.X()+.25<dumbbellStart[XValue]){
+//        turn(-3, 25);
+//    }else if(RPS.X()-.25>dumbbellStart[XValue]){
+//        turn(3, 25);
+//    }
     grabDumbbell();
 
     faceAngle(0);
     LCD.WriteLine("Go to that ramp");
 
-    if(RPS.X()+.25<dumbbellStart[0]){
-        turn(2, 25);
-        moveNoRPSCalibrated(12, 30);
-    }else if(RPS.X()-.25>dumbbellStart[0]){
-        turn(-2, 25);
-        moveNoRPSCalibrated(12, 30);
-    }else {
+//    if(RPS.X()+.25<dumbbellStart[XValue]){
+//        turn(2, 25);
+//        moveNoRPSCalibrated(12, 30);
+//    }else if(RPS.X()-.25>dumbbellStart[XValue]){
+//        turn(-2, 25);
+//        moveNoRPSCalibrated(12, 30);
+//    }else {
         moveY(30, 25);
 
-    }
+//    }
 
     LCD.WriteLine("Charge");
     move(20, 30);
@@ -141,16 +151,10 @@ int main(void){
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     faceAngle2(0);
-    moveY(fuelLight[1]-10, 25);
+    moveY(fuelLight[YValue]-10, 25);
+    faceAngle(0);
 
-    if(RPS.X()<fuelLight[0]-.125){
-        turn(-2,25);
-    }else{
-
-        faceAngle2(0);
-    }
-
-    //moveRPS(fuelLight[0],fuelLight[1],25);
+    //moveRPS(fuelLight[XValue],fuelLight[YValue],25);
 
     LCD.WriteLine("Search for light");
 
@@ -169,7 +173,9 @@ int main(void){
     faceAngle2(90);
     /////////////////////FIX
     Sleep(200);
-    moveNoRPSCalibrated(RPS.X()-dumbbellEnd[0]+5.5, 25);
+
+    LCD.WriteLine("Go across the field");
+    moveStraight(RPS.X()-dumbbellEnd[XValue]+5.5, 25);
 
     LCD.WriteLine("Face south and move back");
     //Sleep(200);
@@ -177,9 +183,9 @@ int main(void){
     moveNoRPS(3, 25);
     faceAngle2(180);
     moveNoRPS(4, -25);
-    if(RPS.X()+.25<dumbbellEnd[0]){
+    if(RPS.X()+.25<dumbbellEnd[XValue]){
         turn(-3, 25);
-    }else if(RPS.X()-.25>dumbbellEnd[0]){
+    }else if(RPS.X()-.25>dumbbellEnd[XValue]){
         turn(3, 25);
     }
     moveNoRPS(2.5, -25);
@@ -194,7 +200,10 @@ int main(void){
     moveNoRPSCalibrated(3,25);
 
     ////////////////////////////////go to the front of the ramp
-    moveX(fuelLight[0]+7,25);
+
+    LCD.WriteLine("Go to front of ramp");
+    moveX(fuelLight[XValue]+6, 30);
+
     ////////////////////////////////last half of 4
 
     LCD.WriteLine("Go down the ramp");
