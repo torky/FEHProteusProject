@@ -176,7 +176,7 @@ void doLevers(){
     //Sleep(200);
     turn(-90, 25);
     //Sleep(200);
-    moveNoRPS(3.25, 35);
+    moveNoRPS(3.75, 35);
     //Sleep(200);
     turn(90, 25);
     faceAngle2(180);
