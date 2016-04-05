@@ -8,12 +8,13 @@
 #include <FEHSD.h>
 
 //Sensor declarations
-AnalogInputPin leftOpt(FEHIO::P0_0);
-AnalogInputPin midOpt(FEHIO::P0_2);
-AnalogInputPin rightOpt(FEHIO::P0_4);
-
 AnalogInputPin CdS(FEHIO::P1_7);
 AnalogInputPin CdSButtonSensor(FEHIO::P3_2);
+
+AnalogInputPin CdSRight(FEHIO::P1_2);
+AnalogInputPin CdSLeft(FEHIO::P1_4);
+
+DigitalInputPin centerBump(FEHIO::P0_7);
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank2);
@@ -59,6 +60,7 @@ static const float CARD_MAX = 2389;
 static const float MAGNET_MIN = 508;
 static const float MAGNET_MAX = 2430;
 static const float GRAB_DUMBBELL = 110;
+static const float CARD_ARM_DEGREE = 6;
 
 //Motor Constants
 static const float rightOffsetForward = 1-20.0/915;
@@ -104,6 +106,8 @@ int main(void){
 
     calibrateMapPerformanceTest4();
 
+    while(!buttons.RightPressed());
+
     LCD.Clear();
 
     /////PERFORMANCE TEST 4 first half/////
@@ -112,49 +116,32 @@ int main(void){
     startWait();
     //first diagonal line up
     LCD.WriteLine("Move to first point");
-    move(15, 35);
+    move(15, 45);
 
     LCD.WriteLine("Move to right x with 6.5 inch adjust");
     moveX(dumbbellStart[XValue]+6.5, 25);
 
     LCD.WriteLine("Move to back perfectly???");
     moveY(dumbbellStart[YValue], -25);
-    inchY(dumbbellStart[YValue]);
+    //inchY(dumbbellStart[YValue]);
 
     LCD.WriteLine("grab that bell");
     faceAngle2(0);
 
-//    if(RPS.X()+.25<dumbbellStart[XValue]){
-//        turn(-3, 25);
-//    }else if(RPS.X()-.25>dumbbellStart[XValue]){
-//        turn(3, 25);
-//    }
     grabDumbbell();
 
-    faceAngle(0);
     LCD.WriteLine("Go to that ramp");
 
-//    if(RPS.X()+.25<dumbbellStart[XValue]){
-//        turn(2, 25);
-//        moveNoRPSCalibrated(12, 30);
-//    }else if(RPS.X()-.25>dumbbellStart[XValue]){
-//        turn(-2, 25);
-//        moveNoRPSCalibrated(12, 30);
-//    }else {
-        moveY(30, 25);
-
-//    }
+    moveY(30, 25);
 
     LCD.WriteLine("Charge");
     move(20, 30);
 
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
-    faceAngle2(0);
+    //Pauses because faceAngle2
     moveY(fuelLight[YValue]-10, 25);
     faceAngle(0);
-
-    //moveRPS(fuelLight[XValue],fuelLight[YValue],25);
 
     LCD.WriteLine("Search for light");
 
@@ -166,29 +153,30 @@ int main(void){
     ///
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
-    faceAngle2(0);
+    //faceAngle2(0);
     moveY(55.3, -25);
 
     LCD.WriteLine("Align x with 2 inch adjust");
     faceAngle2(90);
     /////////////////////FIX
-    Sleep(200);
+    Sleep(100);
 
     LCD.WriteLine("Go across the field");
-    moveStraight(RPS.X()-dumbbellEnd[XValue]+5.5, 25);
+    moveStraight(RPS.X()-dumbbellEnd[XValue], 45);
+    moveUntilBump(30);
+    moveNoRPS(2, -25);
 
     LCD.WriteLine("Face south and move back");
-    //Sleep(200);
     turn(-85,25);
     moveNoRPS(3, 25);
     faceAngle2(180);
-    moveNoRPS(4, -25);
+    moveStraight(4, -25);
     if(RPS.X()+.25<dumbbellEnd[XValue]){
         turn(-3, 25);
     }else if(RPS.X()-.25>dumbbellEnd[XValue]){
         turn(3, 25);
     }
-    moveNoRPS(2.5, -25);
+    moveStraight(2.5, -25);
 
     LCD.WriteLine("Scrape dumbbell");
     //Sleep(200);
@@ -201,34 +189,36 @@ int main(void){
 
     ////////////////////////////////go to the front of the ramp
 
-    LCD.WriteLine("Go to front of ramp");
-    moveX(fuelLight[XValue]+6, 30);
+    LCD.WriteLine("Face the front of ramp");
+    //faceAngle2(270);
+    turn(-85, 35);
+
+    LCD.WriteLine("Move your asshole over to the ramp");
+    moveUntilBump(35);
+    while(RPS.X()<fuelLight[XValue]+5){
+        moveStraight(1, 25);
+    }
+
+    moveStraight(.5, -25);
 
     ////////////////////////////////last half of 4
 
     LCD.WriteLine("Go down the ramp");
-    moveY(25.7, -35);
-    faceAngle2(0);
+    moveDownY(26, -35);
 
-    Sleep(200);
+    Sleep(100);
+    LCD.WriteLine("Check Y");
+
+    while(RPS.Y()==-1);
     if(RPS.Y()<23){
-        moveY(26, 25);
+        moveY(26, 35);
+    }else if(RPS.Y()>28){
+        moveY(27, -35);
     }
-    faceAngle2(0);
-
-    /*LCD.WriteLine("Lower the magnetic arm");
-    magnetArm.SetDegree(50);
-    Sleep(1000);
-    LCD.WriteLine("Lower the magnetic arm");
-    magnetArm.SetDegree(90);
-    */
 
     LCD.WriteLine("Head straight for the launch button");
 
     faceAngle2(300);
-
-    //moveRPS(0, 17, -50);
-    //timedMove(5000, 30);
 
     leftMotor.SetPercent(-55);
     rightMotor.SetPercent(-50);

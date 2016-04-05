@@ -186,6 +186,20 @@ void move(float inches, int percent){
 
 }
 
+void moveUntilBump(int percent){
+    //Set left and right motor percentages
+    rightMotor.SetPercent(percent*rightOffsetForward);
+    leftMotor.SetPercent(percent*leftOffsetForward);
+
+    //Drive the specified number of cycles and or distance
+    float timeStart = TimeNow();
+    while(centerBump.Value() && TimeNow()-timeStart<3);
+
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+
 void moveNoRPS(float inches, int percent){
     //Reset encoder counts
     rightEnc.ResetCounts();
@@ -250,6 +264,76 @@ void moveStraight(float inches, float percent){
     rightEnc.ResetCounts();
     leftEnc.ResetCounts();
 
+    //Set left and right motor percentages
+    if(percent<0){
+        rightMotor.SetPercent(percent*rightOffsetBack);
+        leftMotor.SetPercent(percent*leftOffsetBack);
+    }else{
+        rightMotor.SetPercent(percent*rightOffsetForward);
+        leftMotor.SetPercent(percent*leftOffsetForward);
+    }
+
+    //Convert the inches to a value for shaft encoding
+    int counts = inches/CALIBRATE;
+    //Drive the specified number of cycles and or distance
+    float timeStart = TimeNow();
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<3){
+        leftMotor.SetPercent(percent);
+        float difference = leftEnc.Counts()-rightEnc.Counts();
+        if(percent<0){
+            rightMotor.SetPercent(percent-difference*k);
+        }else{
+            rightMotor.SetPercent(percent+difference*k);
+        }
+    }
+
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+
+void moveStraightAcross(float inches, float percent){
+    //Reset encoder counts
+    rightEnc.ResetCounts();
+    leftEnc.ResetCounts();
+
+    //Set left and right motor percentages
+    if(percent<0){
+        rightMotor.SetPercent(percent*rightOffsetBack);
+        leftMotor.SetPercent(percent*leftOffsetBack);
+    }else{
+        rightMotor.SetPercent(percent*rightOffsetForward);
+        leftMotor.SetPercent(percent*leftOffsetForward);
+    }
+
+    //Convert the inches to a value for shaft encoding
+    int counts = inches/CALIBRATE;
+    //Drive the specified number of cycles and or distance
+    float timeStart = TimeNow();
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<3){
+        leftMotor.SetPercent(percent);
+        float difference = leftEnc.Counts()-rightEnc.Counts();
+        if(percent<0){
+            rightMotor.SetPercent(percent-difference*k);
+        }else{
+            rightMotor.SetPercent(percent+difference*k);
+        }
+        if(TimeNow()-timeStart<2){
+            rightMotor.Stop();
+            leftMotor.Stop();
+            return;
+        }
+    }
+
+    //Turn off motors
+    rightMotor.Stop();
+    leftMotor.Stop();
+}
+void moveDownTheRamp(float inches, float percent, float y){
+    //Reset encoder counts
+    rightEnc.ResetCounts();
+    leftEnc.ResetCounts();
+
 
 
     //Set left and right motor percentages
@@ -268,7 +352,7 @@ void moveStraight(float inches, float percent){
     //LCD.WriteLine(counts);
     //Drive the specified number of cycles and or distance
     float timeStart = TimeNow();
-    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<5){
+    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<3&&RPS.Y()>y){
         leftMotor.SetPercent(percent);
         float difference = leftEnc.Counts()-rightEnc.Counts();
         if(percent<0){
@@ -487,7 +571,7 @@ if(absoluteValueOfTurn>=2){
 //Take two
 void faceAngle2(float angle){
     //inch adjust
-    Sleep(200);
+    Sleep(100);
     //LCD.Write("Heading b4 turn: ");
     //LCD.WriteLine(RPS.Heading());
 
@@ -506,13 +590,13 @@ void faceAngle2(float angle){
         turn(turnDegrees-360, 20);
     }else{
         //turn negative
-        turn(turnDegrees, 20);
+        turn(turnDegrees, 30);
 
     }
 
     bool notAtAngle = true;
     while(notAtAngle){
-        Sleep(300);
+        Sleep(100);
         turnDegrees = RPS.Heading()-angle;
 
 
@@ -546,7 +630,6 @@ void faceAngle2(float angle){
 
         }
     }
-    Sleep(200);
     //LCD.Write("Heading after turn: ");
     //LCD.WriteLine(RPS.Heading());
 }
@@ -561,9 +644,7 @@ void moveX(float x, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
 
-    if(RPS.X()==-1){
-        Sleep(100);
-    }
+    while(RPS.X()==-1);
 
     if(x-RPS.X()>0){
         LCD.WriteLine(RPS.X());
@@ -585,9 +666,7 @@ void moveX(float x, int power){
 void moveY(float y, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
-    if(RPS.Y()==-1){
-        Sleep(100);
-    }
+    while(RPS.Y()==-1);
     if((y-RPS.Y())*power>0){
         faceAngle2(0);
     }else{
@@ -598,6 +677,22 @@ void moveY(float y, int power){
         distance = distance*-1;
     }
     moveStraight(distance , power);
+
+}
+void moveDownY(float y, int power){
+    //turn right 2 inches of change
+    //turn left 8 inches of change
+    while(RPS.Y()==-1);
+    if((y-RPS.Y())*power>0){
+        faceAngle2(0);
+    }else{
+        faceAngle2(180);
+    }
+    float distance = y-RPS.Y();
+    if(distance<0){
+        distance = distance*-1;
+    }
+    moveDownTheRamp(distance , power, y);
 
 }
 

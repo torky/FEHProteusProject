@@ -49,11 +49,11 @@ void approachDumbbell(){
 }
 void grabDumbbell(){
     rotateMagnet(GRAB_DUMBBELL);
-    Sleep(1000);
+    Sleep(500);
     move(3, 25);
-    Sleep(1000);
+    Sleep(500);
     rotateMagnet(0);
-    Sleep(1000);
+    Sleep(500);
 }
 
 void scrapeDumbbell(){
@@ -104,6 +104,7 @@ void doLever2(bool direction){
         //towards bottom
         LCD.WriteLine("Forward");
         cardArm.SetDegree(15.0);
+        //This sleep needs to be 200
         Sleep(200);
         if(RPS.X()!=-1){
             if(RPS.Y()>=redLever[1]+.125){
@@ -117,16 +118,16 @@ void doLever2(bool direction){
         cardArm.SetDegree(100.0);
     }else{
         LCD.WriteLine("Backward");
-        if(RPS.Y()>=redLever[1]-1.0){
-            moveY(redLever[1]-1.0,25);
-        }else{
-            moveNoRPS(2, 35);
-        }
+        moveUntilBump(35);
         faceAngle2(180);
         cardArm.SetDegree(15.0);
         LCD.WriteLine("Position to Pull Backward");
-        Sleep(200);
+        //This sleep needs to be 200
+        Sleep(500);
+
         moveNoRPS(1.5, -25);
+
+
         cardArm.SetDegree(100.0);
         moveNoRPS(1.5, 25);
         LCD.WriteLine("Pulled and lifted");
@@ -165,9 +166,10 @@ void doLevers(){
     turn(-90, 25);
     moveNoRPS(3, 35);
     Sleep(200);
-    turn(90, 25);
+    turn(85, 25);
     //approach distance
     moveNoRPS(2, 35);
+    faceAngle(180);
 
     //Do two
     doLever2(data[1]);
@@ -178,12 +180,12 @@ void doLevers(){
     //Sleep(200);
     moveNoRPS(3.75, 35);
     //Sleep(200);
-    turn(90, 25);
+    turn(80, 25);
     faceAngle2(180);
     //Sleep(200);
     //approach
     //moveNoRPS(2.5, 35);
-    moveNoRPS(.5, 25);
+    //moveStraight(1, 25);
 
     //do three
     doLever2(data[2]);
@@ -235,7 +237,7 @@ void pushButtons(){
         }else if(color == RED_LIGHT_COLOR){
             LCD.WriteLine("RED");
             move(4,-25);
-            cardArm.SetDegree(10);
+            cardArm.SetDegree(CARD_ARM_DEGREE);
             faceAngle2(0);
             //Sleep(500);
             timedMove(300, 25);
@@ -258,28 +260,25 @@ void pushButtons(){
 //////////////////////////////////Calibrate with RPS (needs work)
 void scanForLight(){
 
-    Sleep(150);
 //    int left = 0;
 //    float color = 0;
 //    float timeStart = TimeNow();
 
-    leftMotor.SetPercent(25);
-    rightMotor.SetPercent(25);
+    leftMotor.SetPercent(25*leftOffsetForward);
+    rightMotor.SetPercent(25*rightOffsetForward);
     float a = fuelLight[0]-RPS.X();
     float b = fuelLight[1]-RPS.Y();
     float inches = sqrt(a*a+b*b);
-    float angle = acos(a/inches);
-    float angleDegrees = angle/PI*180;
-    //normalize angle for our robot
-    angleDegrees+=270;
-    //fix angle if it's not between 0 and 360
-    if(angleDegrees>360){
-        angleDegrees-=360;
-    }else if(angleDegrees <0){
-        angleDegrees+=360;
-    }
-
-    Sleep(200);
+//    float angle = acos(a/inches);
+//    float angleDegrees = angle/PI*180;
+//    //normalize angle for our robot
+//    angleDegrees+=270;
+//    //fix angle if it's not between 0 and 360
+//    if(angleDegrees>360){
+//        angleDegrees-=360;
+//    }else if(angleDegrees <0){
+//        angleDegrees+=360;
+//    }
     //faceAngle(angleDegrees);
 
     int counts = inches * COUNTS_PER_INCH;
@@ -293,22 +292,36 @@ void scanForLight(){
         float difference = leftEnc.Counts()-rightEnc.Counts();
         rightMotor.SetPercent(20+difference*k);
 
-        if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2){
+        if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2||CdSRight.Value()<MAX_RED_COLOR+.2){
             rightMotor.Stop();
             leftMotor.Stop();
 
             LCD.WriteLine("RED");
             move(4,-25);
-            cardArm.SetDegree(10);
+            cardArm.SetDegree(CARD_ARM_DEGREE);
             faceAngle2(0);
+            //Sleep(500);
+            timedMove(300, 25);
+            timedMove(500, 20);
+            timedMove(5500, 5);
+            colorString = 'r';
+            cardArm.SetDegree(120);
+
+            return;
+        }else if(CdSLeft.Value()<MAX_RED_COLOR+.2){
+            rightMotor.Stop();
+            leftMotor.Stop();
+
+            LCD.WriteLine("RED");
+            move(4,-25);
+            cardArm.SetDegree(CARD_ARM_DEGREE);
+            faceAngle2(2);
             //Sleep(500);
             timedMove(300, 25);
             timedMove(600, 20);
             Sleep(5500);
             colorString = 'r';
             cardArm.SetDegree(120);
-
-            return;
         }
     }
     if(colorString!='r'){
