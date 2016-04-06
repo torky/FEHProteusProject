@@ -114,14 +114,20 @@ int main(void){
 
     LCD.WriteLine("Start wait");
     startWait();
+    startPoint[XValue] = RPS.X();
+    startPoint[YValue] = RPS.Y();
     //first diagonal line up
     LCD.WriteLine("Move to first point");
-    move(15, 45);
+    move(5, 45);
 
     LCD.WriteLine("Move to right x with 6.5 inch adjust");
-    moveX(dumbbellStart[XValue]+6.5, 25);
+//    moveX(dumbbellStart[XValue]+6.5, 25);
+    faceAngle2(270);
+    moveUntilBump(35);
+    faceAngle2(0);
 
     LCD.WriteLine("Move to back perfectly???");
+
     moveY(dumbbellStart[YValue], -25);
     //inchY(dumbbellStart[YValue]);
 
@@ -204,10 +210,13 @@ int main(void){
     ////////////////////////////////last half of 4
 
     LCD.WriteLine("Go down the ramp");
-    moveDownY(26, -35);
+    //moveDownY(26, -35);
 
     Sleep(100);
     LCD.WriteLine("Check Y");
+
+    faceAngle2(0);
+    moveStraight(24, -45);
 
     while(RPS.Y()==-1);
     if(RPS.Y()<23){
@@ -216,19 +225,19 @@ int main(void){
         moveY(27, -35);
     }
 
-    LCD.WriteLine("Head straight for the launch button");
+    LCD.WriteLine("Face Angle");
 
     faceAngle2(300);
 
+    LCD.WriteLine("Go for the kill");
     leftMotor.SetPercent(-55);
-    rightMotor.SetPercent(-50);
+    rightMotor.SetPercent(-55);
     float timeStart = TimeNow();
     while(TimeNow()-timeStart<3);
-    move(3,25);
-    LCD.WriteLine("Lower the magnetic arm");
-    magnetArm.SetDegree(90);
-    Sleep(100);
-    timedMove(10000, -50);
+
+    moveStraight(10, 35);
+    moveRPS(startPoint[XValue], startPoint[YValue], -60);
+    timedMove(1000, -30);
 
     return 0;
 }

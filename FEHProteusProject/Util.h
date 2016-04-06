@@ -400,6 +400,10 @@ void turn(int angle, int percent){
         counts = -counts;
     }
 
+    if(percent == 40){
+        counts = counts*.85;
+    }
+
     //LCD.WriteLine("deciding");
     if(angle < 0){
         //Set both motors to desired percent
@@ -587,10 +591,10 @@ void faceAngle2(float angle){
     if(turnDegrees>180){
         //turn positive
         //changed from negative one
-        turn(turnDegrees-360, 20);
+        turn(turnDegrees-360, 40);
     }else{
         //turn negative
-        turn(turnDegrees, 30);
+        turn(turnDegrees, 40);
 
     }
 

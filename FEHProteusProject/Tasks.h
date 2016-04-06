@@ -180,7 +180,9 @@ void doLevers(){
     //Sleep(200);
     moveNoRPS(3.75, 35);
     //Sleep(200);
-    turn(80, 25);
+    turn(60, 25);
+    //This sleep makes it not over turn
+    Sleep(100);
     faceAngle2(180);
     //Sleep(200);
     //approach
@@ -264,8 +266,8 @@ void scanForLight(){
 //    float color = 0;
 //    float timeStart = TimeNow();
 
-    leftMotor.SetPercent(25*leftOffsetForward);
-    rightMotor.SetPercent(25*rightOffsetForward);
+//    leftMotor.SetPercent(25*leftOffsetForward);
+//    rightMotor.SetPercent(25*rightOffsetForward);
     float a = fuelLight[0]-RPS.X();
     float b = fuelLight[1]-RPS.Y();
     float inches = sqrt(a*a+b*b);
@@ -281,7 +283,7 @@ void scanForLight(){
 //    }
     //faceAngle(angleDegrees);
 
-    int counts = inches * COUNTS_PER_INCH;
+    int counts = inches * COUNTS_PER_INCH+10;
     rightMotor.SetPercent(20*rightOffsetForward);
     leftMotor.SetPercent(20);
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
@@ -292,7 +294,7 @@ void scanForLight(){
         float difference = leftEnc.Counts()-rightEnc.Counts();
         rightMotor.SetPercent(20+difference*k);
 
-        if(CdSButtonSensor.Value()<MAX_RED_COLOR+.2||CdSRight.Value()<MAX_RED_COLOR+.2){
+        if((CdSButtonSensor.Value()<MAX_RED_COLOR+.2)||(CdSRight.Value()<MAX_RED_COLOR+.2)){
             rightMotor.Stop();
             leftMotor.Stop();
 
