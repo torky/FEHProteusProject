@@ -65,6 +65,11 @@ void scrapeDumbbell(){
     Sleep(200);
     rotateMagnet(30);
 
+    ////////
+    //Return to the box
+    move(5, -35);
+    ////////
+
     /*/Chop
     Sleep(200);
     timedMove(500, -50);
@@ -120,11 +125,11 @@ void doLever2(bool direction){
     }else{
         LCD.WriteLine("Backward");
         moveUntilBump(35);
-        moveStraight(.125, -25);
+        moveStraight(.12, -25);
         faceAngle2(180);
         cardArm.SetDegree(15.0);
         LCD.WriteLine("Position to Pull Backward");
-        //This sleep needs to be 200
+        //This sleep needs to be 200 at least
         Sleep(500);
 
         moveNoRPS(1.5, -25);
@@ -142,9 +147,11 @@ void doLevers(){
     //Get data
     float pos[3];
     //Align behind 1
-    turn(15, 35);
+    turn(25, 35);
     Sleep(200);
-    timedMove(750, 25);
+    //Changed from 750
+    timedMove(850, 25);
+    //moveNoRPSCalibrated(4, 25);
     //moveNoRPS(5.5, 35);
     Sleep(200);
     moveNoRPSCalibrated(.125, -25);
@@ -179,7 +186,9 @@ void doLevers(){
     //Sleep(200);
     turn(-90, 25);
     //Sleep(200);
-    moveNoRPS(3.75, 35);
+
+    //changed from 3.75
+    moveNoRPS(3.25, 35);
     //Sleep(200);
     turn(60, 25);
     //This sleep makes it not over turn

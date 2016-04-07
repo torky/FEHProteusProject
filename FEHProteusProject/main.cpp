@@ -102,6 +102,7 @@ int main(void){
 //    Sleep(100000);
     RPS.InitializeTouchMenu();
 
+    //magnetArm.TouchCalibrate();
     calibrateServos();
 
     calibrateMapPerformanceTest4();
@@ -182,6 +183,7 @@ int main(void){
     LCD.WriteLine("Go across the field");
     moveStraight(RPS.X()-dumbbellEnd[XValue], 50);
     moveUntilBump(30);
+    //Stepback
     moveStraight(3, -25);
 
     LCD.WriteLine("Face south and move back");
@@ -244,7 +246,9 @@ int main(void){
     float angle = atan(yLength/xLength);
     angle = angle*180/PI;
 
-    faceAngle2(360-angle);
+    //311.55
+    //faceAngle2(360-angle);
+    faceAngle2(300);
 
     LCD.WriteLine("Go for the kill");
     //55 50 is for bump
