@@ -193,7 +193,15 @@ void moveUntilBump(int percent){
 
     //Drive the specified number of cycles and or distance
     float timeStart = TimeNow();
-    while(centerBump.Value() && TimeNow()-timeStart<3);
+    while(centerBump.Value() && TimeNow()-timeStart<3){
+        leftMotor.SetPercent(percent);
+        float difference = leftEnc.Counts()-rightEnc.Counts();
+        if(percent<0){
+            rightMotor.SetPercent(percent-difference*k);
+        }else{
+            rightMotor.SetPercent(percent+difference*k);
+        }
+    }
 
     //Turn off motors
     rightMotor.Stop();
@@ -461,7 +469,7 @@ void pushArm(float inches){
     cardArm.SetDegree(inches * ARM_DEGREE_PER_INCH);
 }
 
-void rotateMagnet(int angle){
+void rotateMagnet(float angle){
     magnetArm.SetDegree(angle);
 }
 
@@ -600,7 +608,7 @@ void faceAngle2(float angle){
 
     bool notAtAngle = true;
     while(notAtAngle){
-        Sleep(100);
+        Sleep(150);
         turnDegrees = RPS.Heading()-angle;
 
 
@@ -648,7 +656,9 @@ void moveX(float x, int power){
     //turn right 2 inches of change
     //turn left 8 inches of change
 
-    while(RPS.X()==-1);
+    if(RPS.X()==-1){
+        Sleep(100);
+    }
 
     if(x-RPS.X()>0){
         LCD.WriteLine(RPS.X());
@@ -667,10 +677,12 @@ void moveX(float x, int power){
 
 //y = the rps y value
 //backwards = negative power value
-void moveY(float y, int power){
+void moveY(float y, float power){
     //turn right 2 inches of change
     //turn left 8 inches of change
-    while(RPS.Y()==-1);
+    if(RPS.Y()==-1){
+        Sleep(100);
+    }
     if((y-RPS.Y())*power>0){
         faceAngle2(0);
     }else{
@@ -683,7 +695,7 @@ void moveY(float y, int power){
     moveStraight(distance , power);
 
 }
-void moveDownY(float y, int power){
+void moveDownY(float y, float power){
     //turn right 2 inches of change
     //turn left 8 inches of change
     while(RPS.Y()==-1);

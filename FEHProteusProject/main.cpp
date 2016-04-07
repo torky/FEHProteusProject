@@ -55,11 +55,11 @@ static const float COUNTS_PER_DEGREE = 190.0/90.0;
 static const float ARM_DEGREE_PER_INCH = 0;
 
 //Servo Constants
-static const float CARD_MIN = 510;
-static const float CARD_MAX = 2389;
-static const float MAGNET_MIN = 508;
+static const float CARD_MIN = 500;
+static const float CARD_MAX = 2336;
+static const float MAGNET_MIN = 500;
 static const float MAGNET_MAX = 2430;
-static const float GRAB_DUMBBELL = 110;
+static const float GRAB_DUMBBELL = 135;
 static const float CARD_ARM_DEGREE = 6;
 
 //Motor Constants
@@ -124,6 +124,7 @@ int main(void){
 //    moveX(dumbbellStart[XValue]+6.5, 25);
     faceAngle2(270);
     moveUntilBump(35);
+    moveStraight(.75, -35);
     faceAngle2(0);
 
     LCD.WriteLine("Move to back perfectly???");
@@ -138,19 +139,30 @@ int main(void){
 
     LCD.WriteLine("Go to that ramp");
 
-    moveY(30, 25);
+//    moveY(30, 30);
+    faceAngle2(0);
+    moveStraight(30-RPS.Y(), 30);
 
     LCD.WriteLine("Charge");
-    move(20, 30);
+    moveStraight(20, 30);
+    if((RPS.Heading()>5)&&(RPS.Y()<aboveRamp[XValue]-4)){
+        LCD.WriteLine("We've been fucked");
+        moveStraight(7, -50);
+        faceAngle2(0);
+        moveStraight(20,30);
+
+    }
 
     //D move to 55.3, H move to 56.3
     LCD.WriteLine("Face north and align Y 57.3");
     //Pauses because faceAngle2
-    moveY(fuelLight[YValue]-10, 25);
+    moveY(fuelLight[YValue]-13, 25);
     faceAngle(0);
+    LCD.WriteLine(RPS.X());
 
     LCD.WriteLine("Search for light");
 
+    LCD.WriteLine(CdSRight.Value());
     //OFF TO THE RIGHT WTF WHY CAN'T THE ROBOT JUST WORK!!!!!!!!
     scanForLight();
     LCD.WriteLine(colorString);
@@ -168,24 +180,25 @@ int main(void){
     Sleep(100);
 
     LCD.WriteLine("Go across the field");
-    moveStraight(RPS.X()-dumbbellEnd[XValue], 45);
+    moveStraight(RPS.X()-dumbbellEnd[XValue], 50);
     moveUntilBump(30);
-    moveNoRPS(2, -25);
+    moveStraight(3, -25);
 
     LCD.WriteLine("Face south and move back");
-    turn(-85,25);
+    turn(-70,25);
     moveNoRPS(3, 25);
     faceAngle2(180);
     moveStraight(4, -25);
-    if(RPS.X()+.25<dumbbellEnd[XValue]){
-        turn(-3, 25);
-    }else if(RPS.X()-.25>dumbbellEnd[XValue]){
-        turn(3, 25);
-    }
+//    if(RPS.X()+.25<dumbbellEnd[XValue]){
+//        turn(-3, 25);
+//    }else if(RPS.X()-.25>dumbbellEnd[XValue]){
+//        turn(3, 25);
+//    }
     moveStraight(2.5, -25);
 
     LCD.WriteLine("Scrape dumbbell");
     //Sleep(200);
+
     scrapeDumbbell();
 
     ///Levers
@@ -196,8 +209,7 @@ int main(void){
     ////////////////////////////////go to the front of the ramp
 
     LCD.WriteLine("Face the front of ramp");
-    //faceAngle2(270);
-    turn(-85, 35);
+    faceAngle2(263);
 
     LCD.WriteLine("Move your asshole over to the ramp");
     moveUntilBump(35);
@@ -205,39 +217,45 @@ int main(void){
         moveStraight(1, 25);
     }
 
-    moveStraight(.5, -25);
+    moveStraight(1, -25);
 
     ////////////////////////////////last half of 4
 
     LCD.WriteLine("Go down the ramp");
     //moveDownY(26, -35);
 
-    Sleep(100);
     LCD.WriteLine("Check Y");
 
     faceAngle2(0);
     moveStraight(24, -45);
 
-    while(RPS.Y()==-1);
-    if(RPS.Y()<23){
-        moveY(26, 35);
-    }else if(RPS.Y()>28){
-        moveY(27, -35);
-    }
+//    while(RPS.Y()==-1);
+//    if(RPS.Y()<23){
+//        moveY(26, 35);
+//    }else if(RPS.Y()>28){
+//        moveY(27, -35);
+//    }
 
     LCD.WriteLine("Face Angle");
 
-    faceAngle2(300);
+    Sleep(100);
+    float xLength = startPoint[XValue] - RPS.X() ;
+    float yLength = startPoint[YValue] - RPS.Y() ;
+    float angle = atan(yLength/xLength);
+    angle = angle*180/PI;
+
+    faceAngle2(360-angle);
 
     LCD.WriteLine("Go for the kill");
+    //55 50 is for bump
     leftMotor.SetPercent(-55);
-    rightMotor.SetPercent(-55);
+    rightMotor.SetPercent(-50);
     float timeStart = TimeNow();
     while(TimeNow()-timeStart<3);
 
-    moveStraight(10, 35);
+    moveStraight(5, 35);
     moveRPS(startPoint[XValue], startPoint[YValue], -60);
-    timedMove(1000, -30);
+    timedMove(5000, -60);
 
     return 0;
 }

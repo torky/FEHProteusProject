@@ -51,26 +51,27 @@ void grabDumbbell(){
     rotateMagnet(GRAB_DUMBBELL);
     Sleep(500);
     move(3, 25);
-    Sleep(500);
-    rotateMagnet(0);
-    Sleep(500);
+    Sleep(200);
+    float timeStart = TimeNow();
+    rotateMagnet(10);
 }
 
 void scrapeDumbbell(){
     rotateMagnet(50);
     Sleep(200);
-    rotateMagnet(100);
+    rotateMagnet(122);
     Sleep(200);
     move(5, 35);
     Sleep(200);
     rotateMagnet(30);
+
+    /*/Chop
     Sleep(200);
     timedMove(500, -50);
-
-    rotateMagnet(100);
+    rotateMagnet(135);
     Sleep(200);
     rotateMagnet(10);
-    Sleep(200);
+    Sleep(200);//*/
 }
 void doLever(bool direction){
     if(!direction){
@@ -119,6 +120,7 @@ void doLever2(bool direction){
     }else{
         LCD.WriteLine("Backward");
         moveUntilBump(35);
+        moveStraight(.125, -25);
         faceAngle2(180);
         cardArm.SetDegree(15.0);
         LCD.WriteLine("Position to Pull Backward");
@@ -126,7 +128,6 @@ void doLever2(bool direction){
         Sleep(500);
 
         moveNoRPS(1.5, -25);
-
 
         cardArm.SetDegree(100.0);
         moveNoRPS(1.5, 25);
@@ -164,7 +165,7 @@ void doLevers(){
     //Go to two
     Sleep(200);
     turn(-90, 25);
-    moveNoRPS(3, 35);
+    moveNoRPS(3.5, 35);
     Sleep(200);
     turn(85, 25);
     //approach distance
@@ -294,7 +295,7 @@ void scanForLight(){
         float difference = leftEnc.Counts()-rightEnc.Counts();
         rightMotor.SetPercent(20+difference*k);
 
-        if((CdSButtonSensor.Value()<MAX_RED_COLOR+.2)||(CdSRight.Value()<MAX_RED_COLOR+.2)){
+        if((CdSButtonSensor.Value()<MAX_RED_COLOR+.2)||(CdSRight.Value()<MAX_RED_COLOR+.4)){
             rightMotor.Stop();
             leftMotor.Stop();
 
