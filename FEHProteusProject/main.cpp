@@ -53,6 +53,7 @@ static const float PI = 3.14159265358979323846;
 static const float COUNTS_PER_INCH = COUNTS_PER_REV/(PI*WHEEL_DIAMETER);
 static const float CALIBRATE = 27.125/915;
 static const float COUNTS_PER_DEGREE = 190.0/90.0;
+static const float COUNTS_PER_DEGREE_TESTED = 825/360;
 static const float ARM_DEGREE_PER_INCH = 0;
 
 //Servo Constants
@@ -116,84 +117,88 @@ int main(void){
 
     /////PERFORMANCE TEST 4 first half/////
 
-    LCD.WriteLine("Start wait");
+    //LCD.WriteLine("Start wait");
     startWait();
     startPoint[XValue] = RPS.X();
     startPoint[YValue] = RPS.Y();
     course = RPS.CurrentRegionLetter();
     //first diagonal line up
-    LCD.WriteLine("Move to first point");
+    //LCD.WriteLine("Move to first point");
     move(5, 45);
 
-    LCD.WriteLine("Move to right x with 6.5 inch adjust");
+    //LCD.WriteLine("Move to right x with 6.5 inch adjust");
 //    moveX(dumbbellStart[XValue]+6.5, 25);
     faceAngle2(270);
     moveUntilBump(35);
     moveStraight(.75, -35);
     faceAngle2(0);
 
-    LCD.WriteLine("Move to back perfectly???");
+    //LCD.WriteLine("Move to back perfectly???");
 
     moveY(dumbbellStart[YValue], -25);
     //inchY(dumbbellStart[YValue]);
 
-    LCD.WriteLine("grab that bell");
+    //LCD.WriteLine("grab that bell");
     faceAngle2(0);
     turn(-1, 20);
 
     grabDumbbell();
-    LCD.WriteLine("Go to that ramp");
+
+    turn(2, 25);
+
+    //LCD.WriteLine("Go to that ramp");
 
 //    moveY(30, 30);
     faceAngle(0);
 
-    moveStraight(30-RPS.Y(), 30);
+    moveStraight(30-RPS.Y(), 40);
 
-    LCD.WriteLine("Charge");
+    //LCD.WriteLine("Charge");
     moveStraight(20, 30);
     if((RPS.Heading()>5)&&(RPS.Y()<aboveRamp[XValue]-4)){
-        LCD.WriteLine("We've been fucked");
-        moveStraight(8, -50);
+        //LCD.WriteLine("We've been fucked");
+        timedMove(3000, -60);
+        moveRPS(fuelLight[XValue], 27, 25);
         faceAngle2(0);
-        moveStraight(20,30);
+        moveStraight(20,40);
 
     }
 
     //D move to 55.3, H move to 56.3
-    LCD.WriteLine("Face north and align Y 57.3");
+    //LCD.WriteLine("Face north and align Y 57.3");
     //Pauses because faceAngle2
-    moveY(fuelLight[YValue]-13, 25);
+    moveY(fuelLight[YValue]-13, 35);
 
         faceAngle2(0);
 
-    LCD.WriteLine(RPS.X());
+    //LCD.WriteLine(RPS.X());
 
-    LCD.WriteLine("Search for light");
+    //LCD.WriteLine("Search for light");
 
-    LCD.WriteLine(CdSRight.Value());
+    //LCD.WriteLine(CdSRight.Value());
     //OFF TO THE RIGHT WTF WHY CAN'T THE ROBOT JUST WORK!!!!!!!!
     scanForLight();
-    LCD.WriteLine(colorString);
+    //LCD.WriteLine(colorString);
 
     ////////////////////////////////second half of perf 3
     ///
     //D move to 55.3, H move to 56.3
-    LCD.WriteLine("Face north and align Y 57.3");
+    //LCD.WriteLine("Face north and align Y 57.3");
     //faceAngle2(0);
     moveY(55.3, -25);
 
-    LCD.WriteLine("Align x with 2 inch adjust");
+    //LCD.WriteLine("Align x with 2 inch adjust");
     faceAngle2(90);
     /////////////////////FIX
     Sleep(100);
 
-    LCD.WriteLine("Go across the field");
+    //LCD.WriteLine("Go across the field");
     moveStraight(RPS.X()-dumbbellEnd[XValue], 50);
     moveUntilBump(30);
     //Stepback
-    moveStraight(3, -25);
+    moveStraight(2.75, -25);
 
-    LCD.WriteLine("Face south and move back");
+    //LCD.WriteLine("Face south and move back");
     turn(-70,25);
     moveNoRPS(3, 25);
     faceAngle2(180);
@@ -206,7 +211,7 @@ int main(void){
     moveUntilBump(-35);
     moveStraight(2, 25);
 
-    LCD.WriteLine("Scrape dumbbell");
+    //LCD.WriteLine("Scrape dumbbell");
     //Sleep(200);
 
     scrapeDumbbell();
@@ -218,10 +223,10 @@ int main(void){
 
     ////////////////////////////////go to the front of the ramp
 
-    LCD.WriteLine("Face the front of ramp");
+    //LCD.WriteLine("Face the front of ramp");
     faceAngle2(263);
 
-    LCD.WriteLine("Move your asshole over to the ramp");
+    //LCD.WriteLine("Move your asshole over to the ramp");
     moveUntilBump(35);
     while(RPS.X()<fuelLight[XValue]+5){
         moveStraight(1, 25);
@@ -231,10 +236,10 @@ int main(void){
 
     ////////////////////////////////last half of 4
 
-    LCD.WriteLine("Go down the ramp");
+    //LCD.WriteLine("Go down the ramp");
     //moveDownY(26, -35);
 
-    LCD.WriteLine("Check Y");
+    //LCD.WriteLine("Check Y");
 
     faceAngle2(0);
     moveStraight(24, -45);
@@ -246,7 +251,7 @@ int main(void){
 //        moveY(27, -35);
 //    }
 
-    LCD.WriteLine("Face Angle");
+    //LCD.WriteLine("Face Angle");
 
     Sleep(100);
     float xLength = startPoint[XValue] - RPS.X() ;
@@ -258,10 +263,10 @@ int main(void){
     //faceAngle2(360-angle);
     faceAngle2(300);
 
-    LCD.WriteLine("Go for the kill");
+    //LCD.WriteLine("Go for the kill");
     //55 50 is for bump
-    leftMotor.SetPercent(-55);
-    rightMotor.SetPercent(-50);
+    leftMotor.SetPercent(-65);
+    rightMotor.SetPercent(-60);
     float timeStart = TimeNow();
     while(TimeNow()-timeStart<3);
 

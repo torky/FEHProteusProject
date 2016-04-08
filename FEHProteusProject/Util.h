@@ -403,12 +403,12 @@ void turn(int angle, int percent){
 
     //LCD.WriteLine("converting");
     //Convert angle to counts
-    int counts = angle * COUNTS_PER_DEGREE;
+    int counts = angle * COUNTS_PER_DEGREE_TESTED;
     if(counts < 0){
         counts = -counts;
     }
 
-    if(percent == 40){
+    if(percent >= 45){
         counts = counts*.85;
     }
 
@@ -600,10 +600,10 @@ void faceAngle2(float angle){
     if(turnDegrees>180){
         //turn positive
         //changed from negative one
-        turn(turnDegrees-360, 40);
+        turn(turnDegrees-360, 45);
     }else{
         //turn negative
-        turn(turnDegrees, 40);
+        turn(turnDegrees, 45);
 
     }
 

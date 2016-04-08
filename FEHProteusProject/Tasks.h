@@ -173,6 +173,7 @@ void doLevers(){
 
     //Go to two
     Sleep(200);
+    //////////////////////
     turn(-90, 25);
     //Changed from move No RPS 3.5
     moveStraight(4.0, 35);
@@ -180,7 +181,8 @@ void doLevers(){
     Sleep(200);
     turn(85, 25);
     //approach distance
-    moveNoRPS(2, 35);
+    //moveNoRPS(2, 35);
+
     faceAngle(180);
 
     //Do two
@@ -321,6 +323,7 @@ void scanForLight(){
             timedMove(500, 20);
             timedMove(5500, 5);
             colorString = 'r';
+            moveStraight(1,-25);
             cardArm.SetDegree(120);
 
             return;
@@ -337,6 +340,8 @@ void scanForLight(){
             timedMove(600, 20);
             Sleep(5500);
             colorString = 'r';
+            moveStraight(1,-25);
+
             cardArm.SetDegree(120);
             return;
         }
