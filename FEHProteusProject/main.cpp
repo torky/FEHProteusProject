@@ -15,6 +15,7 @@ AnalogInputPin CdSRight(FEHIO::P1_2);
 AnalogInputPin CdSLeft(FEHIO::P1_4);
 
 DigitalInputPin centerBump(FEHIO::P0_7);
+DigitalInputPin backBump(FEHIO::P3_3);
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank2);
@@ -83,6 +84,8 @@ float redLever[2] = {4, 40.4};
 float whiteLever[2] = {9, 40.4};
 float blueLever[2] = {14, 40.4};
 
+char course;
+
 #include "Optosensor.h"
 #include "Util.h"
 #include "Tasks.h"
@@ -117,6 +120,7 @@ int main(void){
     startWait();
     startPoint[XValue] = RPS.X();
     startPoint[YValue] = RPS.Y();
+    course = RPS.CurrentRegionLetter();
     //first diagonal line up
     LCD.WriteLine("Move to first point");
     move(5, 45);
@@ -135,20 +139,21 @@ int main(void){
 
     LCD.WriteLine("grab that bell");
     faceAngle2(0);
+    turn(-1, 20);
 
     grabDumbbell();
-
     LCD.WriteLine("Go to that ramp");
 
 //    moveY(30, 30);
-    faceAngle2(0);
+    faceAngle(0);
+
     moveStraight(30-RPS.Y(), 30);
 
     LCD.WriteLine("Charge");
     moveStraight(20, 30);
     if((RPS.Heading()>5)&&(RPS.Y()<aboveRamp[XValue]-4)){
         LCD.WriteLine("We've been fucked");
-        moveStraight(7, -50);
+        moveStraight(8, -50);
         faceAngle2(0);
         moveStraight(20,30);
 
@@ -158,7 +163,9 @@ int main(void){
     LCD.WriteLine("Face north and align Y 57.3");
     //Pauses because faceAngle2
     moveY(fuelLight[YValue]-13, 25);
-    faceAngle(0);
+
+        faceAngle2(0);
+
     LCD.WriteLine(RPS.X());
 
     LCD.WriteLine("Search for light");
@@ -190,13 +197,14 @@ int main(void){
     turn(-70,25);
     moveNoRPS(3, 25);
     faceAngle2(180);
-    moveStraight(4, -25);
 //    if(RPS.X()+.25<dumbbellEnd[XValue]){
 //        turn(-3, 25);
 //    }else if(RPS.X()-.25>dumbbellEnd[XValue]){
 //        turn(3, 25);
 //    }
-    moveStraight(2.5, -25);
+
+    moveUntilBump(-35);
+    moveStraight(2, 25);
 
     LCD.WriteLine("Scrape dumbbell");
     //Sleep(200);

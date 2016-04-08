@@ -7,7 +7,9 @@
 void startWait(){
     float timeStart = TimeNow();
     while(readLight(CdS) != 'r'&&TimeNow()-timeStart<30){
-        LCD.WriteLine(CdS.Value());
+        LCD.Write(CdS.Value());
+        LCD.Write(", H:--");
+        LCD.WriteLine(RPS.Heading());
     }
     LCD.Clear();
     LCD.Write("Light value is ");
@@ -70,11 +72,11 @@ void scrapeDumbbell(){
     move(5, -35);
     ////////
 
-    /*/Chop
+    ///*/Chop
     Sleep(200);
     timedMove(500, -50);
     rotateMagnet(135);
-    Sleep(200);
+    Sleep(500);
     rotateMagnet(10);
     Sleep(200);//*/
 }
@@ -172,7 +174,9 @@ void doLevers(){
     //Go to two
     Sleep(200);
     turn(-90, 25);
-    moveNoRPS(3.5, 35);
+    //Changed from move No RPS 3.5
+    moveStraight(4.0, 35);
+
     Sleep(200);
     turn(85, 25);
     //approach distance
@@ -334,6 +338,7 @@ void scanForLight(){
             Sleep(5500);
             colorString = 'r';
             cardArm.SetDegree(120);
+            return;
         }
     }
     if(colorString!='r'){

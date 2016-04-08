@@ -193,7 +193,7 @@ void moveUntilBump(int percent){
 
     //Drive the specified number of cycles and or distance
     float timeStart = TimeNow();
-    while(centerBump.Value() && TimeNow()-timeStart<3){
+    while(centerBump.Value() && TimeNow()-timeStart<3 && backBump.Value()){
         leftMotor.SetPercent(percent);
         float difference = leftEnc.Counts()-rightEnc.Counts();
         if(percent<0){
@@ -285,7 +285,7 @@ void moveStraight(float inches, float percent){
     int counts = inches/CALIBRATE;
     //Drive the specified number of cycles and or distance
     float timeStart = TimeNow();
-    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts&&TimeNow()-timeStart<3){
+    while(((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts)&&(TimeNow()-timeStart<3)){
         leftMotor.SetPercent(percent);
         float difference = leftEnc.Counts()-rightEnc.Counts();
         if(percent<0){
@@ -425,7 +425,8 @@ void turn(int angle, int percent){
 
     //While the average of the left and right encoder are less than counts,
     //keep running motors
-    while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts);
+    float timeStart = TimeNow();
+    while(((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts)&&(TimeNow()-timeStart<2));
 
     //Turn off motors
     rightMotor.Stop();
@@ -723,13 +724,13 @@ void inchX(float x){
     float difference = x-RPS.X();
 
     //if difference is too big
-    while(difference<.125){
+    while(difference<.125&&difference>-1.25){
         difference = x-RPS.X();
 
         if(difference<0){
-            move(.125 , -power);
-        }else{
             move(.125 , power);
+        }else{
+            move(.125 , -power);
         }
 
         Sleep(200);
