@@ -121,7 +121,9 @@ int main(void){
     startWait();
     startPoint[XValue] = RPS.X();
     startPoint[YValue] = RPS.Y();
-    course = RPS.CurrentRegionLetter();
+    if(startPoint[XValue]>0){
+        course = RPS.CurrentRegionLetter();
+    }
     //first diagonal line up
     //LCD.WriteLine("Move to first point");
     move(5, 45);
@@ -144,7 +146,7 @@ int main(void){
 
     grabDumbbell();
 
-    turn(2, 25);
+    turn(3, 25);
 
     //LCD.WriteLine("Go to that ramp");
 
@@ -157,8 +159,8 @@ int main(void){
     moveStraight(20, 30);
     if((RPS.Heading()>5)&&(RPS.Y()<aboveRamp[XValue]-4)){
         //LCD.WriteLine("We've been fucked");
-        timedMove(3000, -60);
-        moveRPS(fuelLight[XValue], 27, 25);
+        timedMove(2000, -30);
+        moveRPS(fuelLight[XValue]+.5, 27, 25);
         faceAngle2(0);
         moveStraight(20,40);
 
@@ -178,6 +180,7 @@ int main(void){
     //LCD.WriteLine(CdSRight.Value());
     //OFF TO THE RIGHT WTF WHY CAN'T THE ROBOT JUST WORK!!!!!!!!
     scanForLight();
+    //SD.CloseLog();
     //LCD.WriteLine(colorString);
 
     ////////////////////////////////second half of perf 3

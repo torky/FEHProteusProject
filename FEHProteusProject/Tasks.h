@@ -176,14 +176,14 @@ void doLevers(){
     //////////////////////
     turn(-90, 25);
     //Changed from move No RPS 3.5
-    moveStraight(4.0, 35);
+    moveStraight(3.5, 35);
 
     Sleep(200);
     turn(85, 25);
     //approach distance
     //moveNoRPS(2, 35);
 
-    faceAngle(180);
+    faceAngle2(180);
 
     //Do two
     doLever2(data[1]);
@@ -193,8 +193,8 @@ void doLevers(){
     turn(-90, 25);
     //Sleep(200);
 
-    //changed from 3.75
-    moveNoRPS(3.25, 35);
+    //changed back to 3.75
+    moveNoRPS(3.75, 35);
     //Sleep(200);
     turn(60, 25);
     //This sleep makes it not over turn
@@ -302,6 +302,12 @@ void scanForLight(){
     int counts = inches * COUNTS_PER_INCH+10;
     rightMotor.SetPercent(20*rightOffsetForward);
     leftMotor.SetPercent(20);
+
+    float rightMinimum = 4;
+    float leftMinimum = 4;
+    float centerMinimum = 4;
+    //SD.OpenLog();
+
     while((leftEnc.Counts() + rightEnc.Counts()) / 2. < counts){
         LCD.Write("CdS:");
         LCD.WriteLine(CdSButtonSensor.Value());
@@ -310,9 +316,23 @@ void scanForLight(){
         float difference = leftEnc.Counts()-rightEnc.Counts();
         rightMotor.SetPercent(20+difference*k);
 
-        if((CdSButtonSensor.Value()<MAX_RED_COLOR+.2)||(CdSRight.Value()<MAX_RED_COLOR+.4)){
+        if(CdSButtonSensor.Value()<centerMinimum){
+            centerMinimum = CdSButtonSensor.Value();
+        }
+        if(CdSLeft.Value()<leftMinimum){
+            leftMinimum = CdSLeft.Value();
+        }
+        if(CdSRight.Value()<rightMinimum){
+            rightMinimum = CdSRight.Value();
+        }
+
+        //SD.Printf("Cm: %f, Rm: %f, Lm: %f", centerMinimum, rightMinimum, leftMinimum);
+
+        if((CdSButtonSensor.Value()<.9-.2)||(CdSRight.Value()<1.2-.2)){
             rightMotor.Stop();
             leftMotor.Stop();
+
+            SD.Printf("C: %f, R: %f, L: %f", CdSButtonSensor.Value(), CdSRight.Value(), CdSLeft.Value());
 
             LCD.WriteLine("RED");
             move(4,-25);
@@ -326,10 +346,14 @@ void scanForLight(){
             moveStraight(1,-25);
             cardArm.SetDegree(120);
 
+
+
             return;
-        }else if(CdSLeft.Value()<MAX_RED_COLOR+.2){
+        }else if(CdSLeft.Value()<1.3-.2){
             rightMotor.Stop();
             leftMotor.Stop();
+
+            //SD.Printf("C: %f, R: %f, L: %f", CdSButtonSensor.Value(), CdSRight.Value(), CdSLeft.Value());
 
             LCD.WriteLine("RED");
             move(4,-25);

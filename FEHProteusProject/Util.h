@@ -590,8 +590,11 @@ void faceAngle2(float angle){
 
     //LCD.Write("Goal: ");
     //LCD.WriteLine(angle);
+    float turnDegrees;
 
-    float turnDegrees = RPS.Heading()-angle;
+    turnDegrees = RPS.Heading()-angle;
+
+
 
     while(turnDegrees<0){
         turnDegrees=turnDegrees+360;
@@ -636,7 +639,7 @@ void faceAngle2(float angle){
 
             }
             //LCD.Write("Heading: ");
-            //LCD.WriteLine(RPS.Heading());
+            LCD.WriteLine(RPS.Heading());
             //LCD.Write("turnDegrees: ");
             //LCD.WriteLine(turnDegrees);
 
